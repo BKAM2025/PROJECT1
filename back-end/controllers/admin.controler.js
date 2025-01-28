@@ -1,7 +1,7 @@
 const { admin } = require("../models/index")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-
+console.log("hello")
 module.exports = {
   register: async (req, resp) => {
     try {
