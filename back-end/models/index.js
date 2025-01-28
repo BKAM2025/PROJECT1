@@ -30,7 +30,21 @@ const user = connection.define("user", {
   
 });
 
-
+const admin = connection.define("admin", {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  mail: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  
+});
 
 
 const category = connection.define("category", {
@@ -76,13 +90,13 @@ const product = connection.define("product", {
   
 });
 
-user.hasMany(product,{throught:products})
+user.hasMany(product)
 product.belongsTo(user)
-category.hasMany(product,{throught:products})
+category.hasMany(product)
 product.belongsTo(category)
-user.hasMany(cart,{throught:products})
+user.hasMany(cart)
 cart.belongsTo(user)
-product.hasMany(cart,{throught:products})
+product.hasMany(cart)
 cart.belongsTo(product)
 
 // this call, Sequelize will automatically perform an SQL query to the database and create a table, printing the message car table created successfully!.
@@ -104,4 +118,4 @@ async function  testconnection(){
 }
 testconnection()
 // export your Model car below
-module.exports = {user,cart,category};
+module.exports = {user,cart,category,admin,product};
