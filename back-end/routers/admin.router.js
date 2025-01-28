@@ -5,4 +5,4 @@ const { login, register } = require("../controllers/admin.controller")
 RouterAdmin.post("/login", login);
 RouterAdmin.post("/register", register);
 
-module.exports = RouterAdmin;
+module.exports = RouterAdmin; 

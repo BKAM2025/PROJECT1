@@ -11,7 +11,7 @@ App.use(express.json())
 App.use(express.urlencoded({ extended: true }));
 
 App.use("/api/user", userRoute)
-App.use("/admin", RouterAdmin)
+App.use("/api/admin", RouterAdmin)
 App.listen(port, () => {
   console.log(`app listening on http://127.0.0.1:${port}`);
 });
