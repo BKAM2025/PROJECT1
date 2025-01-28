@@ -4,7 +4,7 @@ console.log("hello")
 const connection = new Sequelize(
   "e_commerce",
   "root",
-  "120612061206",
+  "root",
   {
     host: "localhost",
     dialect: "mysql",
