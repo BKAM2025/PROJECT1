@@ -102,12 +102,12 @@ cart.belongsTo(product)
 // this call, Sequelize will automatically perform an SQL query to the database and create a table, printing the message car table created successfully!.
 // connection
 //   .sync({ force: true })
-// .then(() => {
-//   console.log("car table created successfully!");
-// })
-// .catch((error) => {
-//   console.error("Unable to create table : ", error);
-// });
+//   .then(() => {
+//     console.log("car table created successfully!");
+//   })
+//   .catch((error) => {
+//     console.error("Unable to create table : ", error);
+//   });
 async function testconnection() {
   try {
     await connection.authenticate();
