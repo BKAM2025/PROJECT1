@@ -6,7 +6,8 @@ import categoryReducer from "./reducers/categories"
 export const store = configureStore({
   reducer: {
  counter:counterReducer,
- category:categoryReducer
+ category:categoryReducer,
+ auth: authReducer
   }
 })
 // console.log("store",store)
