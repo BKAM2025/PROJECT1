@@ -1,13 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
 // import todosReducer from '../features/todos/todosSlice'
 // import filtersReducer from '../features/filters/filtersSlice'
-import counterReducer from './reducers/counter'
-import categoryReducer from "./reducers/categories"
-export const store = configureStore({
+// import counterReducer from './reducers/counter'
+import UserReducer from "../store/reducers/user"
+const store = configureStore({
   reducer: {
  counter:counterReducer,
  category:categoryReducer,
- auth: authReducer
+ auth: authReducer,
+ user:UserReducer,
+
   }
 })
+export default store
 // console.log("store",store)
