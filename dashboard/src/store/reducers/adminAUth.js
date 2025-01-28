@@ -1,16 +1,17 @@
+
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
 
-export const login = (name, password) => async (dispatch) => {
+export const login = (name,mail, password) => async (dispatch) => {
   dispatch(loginRequest());
   try {
-    const response = await axios.post(`http://localhost:5000/login`, { name, password });
-    const { user } = response.data;
+    const response = await axios.post("http://localhost:5000/admin/login", { name,mail, password });
+    const { admin } = response.data;
 
   
-    dispatch(loginSuccess({ user }));
+    dispatch(loginSuccess({ admin }));
   } catch (error) {
 
     dispatch(loginFailure(error.response?.data?.message || error.message));
@@ -19,7 +20,7 @@ export const login = (name, password) => async (dispatch) => {
 
 
 const initialState = {
-  user: null,
+  admin: null,
   token: null,
   isAuthenticated: false,
   loading: false,
@@ -35,7 +36,7 @@ const authSlice = createSlice({
       state.error = null;
     },
     loginSuccess: (state, action) => {
-      state.user = action.payload.user;
+      state.admin = action.payload.admin;
       state.token = action.payload.token;
       state.isAuthenticated = true;
       state.loading = false;
@@ -46,7 +47,7 @@ const authSlice = createSlice({
       state.error = action.payload;
     },
     logout: (state) => {
-      state.user = null;
+      state.admin = null;
       state.token = null;
       state.isAuthenticated = false;
     },
