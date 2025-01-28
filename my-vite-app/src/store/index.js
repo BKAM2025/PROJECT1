@@ -5,6 +5,9 @@ import { configureStore } from '@reduxjs/toolkit'
 import UserReducer from "../store/reducers/user"
 const store = configureStore({
   reducer: {
+ counter:counterReducer,
+ category:categoryReducer,
+ auth: authReducer,
  user:UserReducer,
 
   }
