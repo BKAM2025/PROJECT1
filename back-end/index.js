@@ -2,6 +2,7 @@ const express = require("express");
 const App = express();
 const port = 5000;
 const cors=require("cors")
+console.log("hello");
 
 const userRoute=require("./routers/user.router")
 
