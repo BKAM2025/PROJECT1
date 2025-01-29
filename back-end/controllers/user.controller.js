@@ -24,17 +24,17 @@ login: async (req, res) => {
   const { name, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { name: username } });
+    const usery = await user.findOne({ where: { name: name} });
     console.log("reached");
 
-    console.log(user);
+    console.log(usery);
   
-    if (!user) {
+    if (!usery) {
       return res.status(404).send({ message: "User not found" });
     }
 
    
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, usery.password);
 
  
     if (!isMatch) {
@@ -44,7 +44,7 @@ login: async (req, res) => {
       message: "Login successful",
       user: {
         id: user.id,
-        username: user.username,
+        name: user.name,
       },
     });
 
