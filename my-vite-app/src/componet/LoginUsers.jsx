@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../store/reducers/login";
 
 function LoginUsers() {
   const dispatch = useDispatch();
-  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth);
 
   // State for form inputs
   const [name, setName] = useState("");
@@ -11,12 +12,12 @@ function LoginUsers() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(name, password)); // Dispatch login action
+    dispatch(loginUser({ mail: name, password })); // Dispatch loginUser thunk with correct payload
   };
 
   // If user is authenticated, redirect them or show a message
   if (isAuthenticated) {
-    return <div>Welcome back, {name}!</div>;
+    return <div>Welcome back, {user ? user.name : name}!</div>;
   }
 
   return (

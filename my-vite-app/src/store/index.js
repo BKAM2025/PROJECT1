@@ -6,8 +6,6 @@ import UserReducer from "../store/reducers/user"
 import loginReduce from '../store/reducers/login'
 const store = configureStore({
   reducer: {
-    //  counter:counterReducer,
-    //  category:categoryReducer,
     login: loginReduce,
     user: UserReducer,
 
