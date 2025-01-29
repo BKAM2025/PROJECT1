@@ -1,12 +1,17 @@
-import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './reducers/adminAUth'; // Ensure this path is correct
-import UserReducer from './reducers/user';
-
+import { configureStore } from '@reduxjs/toolkit'
+// import todosReducer from '../features/todos/todosSlice'
+// import filtersReducer from '../features/filters/filtersSlice'
+// import counterReducer from './reducers/counter'
+import UserReducer from "../store/reducers/user"
+import loginReduce from '../store/reducers/login'
 const store = configureStore({
   reducer: {
-    auth: authReducer,
+    //  counter:counterReducer,
+    //  category:categoryReducer,
+    login: loginReduce,
     user: UserReducer,
-  },
-});
 
-export default store;
+  }
+})
+export default store
+// console.log("store",store)

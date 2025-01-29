@@ -24,7 +24,7 @@ module.exports = {
     const { name, password } = req.body;
 
     try {
-      const user = await User.findOne({ where: { name: name } });
+      const user = await User.findOne({ where: { name: username } });
       console.log("reached");
 
       console.log(user);

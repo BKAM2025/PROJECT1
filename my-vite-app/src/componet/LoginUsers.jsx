@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../store/reducers/login"; // Import the loginUser thunk
 
 function LoginUsers() {
   const dispatch = useDispatch();
@@ -12,7 +11,7 @@ function LoginUsers() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUser({ name, password })); // Dispatch loginUser thunk
+    dispatch(login(name, password)); // Dispatch login action
   };
 
   // If user is authenticated, redirect them or show a message
