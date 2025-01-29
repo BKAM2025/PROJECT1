@@ -1,27 +1,38 @@
 // src/components/AdminLogin.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import store from "../store/index.js";
-// const loginAdmin = store.reducer.loginAdmin
-console.log("storeeeeeeeee", store)
-const AdminLogin = () => {
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+
+import { login } from "../store/reducers/adminAUth"; // Ensure this import is correct
+
+const AdminLogins = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const { loading, error, isAuthenticated, user } = useSelector((state) => state.login);
+
+  // State for form inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth);
 
-  const handleLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Dispatch admin login action
-    dispatch(loginAdmin({ email, password }));
+    dispatch(login(email, password)); // Dispatch login thunk with correct payload
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      <div>{error}</div>; // Log success message to console
+    } else if (isAuthenticated) {
+      navigate('/AdminDashboard');
+    }
+  }, [isAuthenticated]);
+
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center mb-4">Admin Login</h2>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">Email</label>
             <input
@@ -59,4 +70,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default AdminLogins;

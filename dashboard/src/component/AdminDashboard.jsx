@@ -3,7 +3,7 @@ import React from 'react'
 function AdminDashboard() {
   return (
     <div>
-      <p>hiiiii</p>
+      <p>hiiiii dashhhhhh</p>
     </div>
   )
 }

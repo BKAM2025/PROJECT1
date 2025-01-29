@@ -12,7 +12,7 @@ function LoginUsers() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUser({ mail: name, password })); // Dispatch loginUser thunk with correct payload
+    dispatch(loginUser({ name, password })); // Dispatch loginUser thunk with correct payload
   };
 
   // If user is authenticated, redirect them or show a message

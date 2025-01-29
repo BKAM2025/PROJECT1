@@ -12,7 +12,6 @@ const connection = new Sequelize(
 );
 
 
-
 //your user table using sequilize
 const user = connection.define("user", {
   name: {
@@ -78,7 +77,7 @@ const product = connection.define("product", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  
+
   image: {
     type: DataTypes.STRING,
     allowNull: false,
