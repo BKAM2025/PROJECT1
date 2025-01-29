@@ -4,7 +4,7 @@ console.log("hello")
 const connection = new Sequelize(
   "e_commerce",
   "root",
-  "120612061206",
+  "root",
   {
     host: "localhost",
     dialect: "mysql",
@@ -58,7 +58,10 @@ const category = connection.define("category", {
 
 
 const cart = connection.define("cart", {
-
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  }
 });
 
 
@@ -68,17 +71,14 @@ const product = connection.define("product", {
     allowNull: false,
   },
   price: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
   description: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  image: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-  },
+  
   image: {
     type: DataTypes.STRING,
     allowNull: false,
