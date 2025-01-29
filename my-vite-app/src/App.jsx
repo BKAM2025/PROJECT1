@@ -1,37 +1,32 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './store'; // Assuming you have a store configured
-import LoginUsers from './componet/LoginUsers';
-import SingUpUser from "./componet/singUpUser"
+import store from './store';
+import LoginUsers from './componet/LoginUsers.jsx';
+import SingUpUser from "./componet/singUpUser.jsx"
+import Navbar from './componet/navBar.jsx';
+// import Home from "./componet/home.jsx"
 import './App.css';
-import Navbar from './componet/navBar';
 
 function App() {
   return (
-    <div>
-    <Navbar/>
+  <div>
+    {/* <Navbar/> */}
     <Provider store={store}>
       <Router>
         <Routes>
-          <Route path="/login" element={<LoginUsers />} />
-          {/* {/* <Route path="/signup-user" element={<SingUpUser />} /> */}
+          <Route path="/" element={<LoginUsers />} />
           <Route path="/register" element={<SingUpUser />} /> 
-          {/* Add more routes as needed */}
+          <Route path="/home" element={< Navbar />}  /> 
+       
         </Routes>
       </Router>
-    </Provider></div>
-  );
-}
-
-// A simple Home component for the root path
-function Home() {
-  return (
-    <div>
-      <h1>Welcome to the App</h1>
-      <p>Navigate to different sections using the links above.</p>
+    </Provider>
     </div>
   );
+
 }
+
+
 
 export default App;

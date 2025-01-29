@@ -2,18 +2,41 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../store/reducers/user';
+import axios from "axios"
+import { useNavigate } from 'react-router';
 
 const SingUpUser=()=> {
+ 
   const [name, setName] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.user);
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(registerUser({ name, mail, password }));
+    axios.post('http://localhost:5000/api/user/register', {
+      name,
+      mail,
+      password
+
+    })
+    .then((response) => {
+      console.log("Response", response);
+      navigate("/home"); 
+    })
+    .catch((error) => {
+  
+      if (error.response) {
+        error(error.response.data.message);
+      }
+    });
   };
+
+
+ 
+ 
 
   return (
     <div>
