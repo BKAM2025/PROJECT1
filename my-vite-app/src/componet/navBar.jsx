@@ -1,6 +1,6 @@
 import React from "react";
 import { Search, Heart, ShoppingCart, User } from "lucide-react"; // Icons from Lucide
-
+import {Link} from "react-router-dom"
 const Navbar = () => {
   return (
     <nav className="flex items-center justify-between bg-white shadow-md px-6 py-4">
@@ -21,6 +21,9 @@ const Navbar = () => {
         >
           Sign Up
         </a>
+        {/* <Link to="/cart" className="text-gray-800 hover:text-blue-500">
+          <ShoppingCart size={22} />
+        </Link> */}
       </div>
 
       {/* Right Section */}
