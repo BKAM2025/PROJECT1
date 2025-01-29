@@ -68,17 +68,15 @@ const product = connection.define("product", {
     allowNull: false,
   },
   price: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
   description: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  image: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-  },
+
+  
   image: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -108,14 +106,14 @@ cart.belongsTo(product)
 //   .catch((error) => {
 //     console.error("Unable to create table : ", error);
 //   });
-async function testconnection() {
-  try {
-    await connection.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-}
-testconnection()
+// async function testconnection() {
+//   try {
+//     await connection.authenticate();
+//     console.log('Connection has been established successfully.');
+//   } catch (error) {
+//     console.error('Unable to connect to the database:', error);
+//   }
+// }
+// testconnection()
 // export your Model car below
 module.exports = { user, cart, category, admin, product };
