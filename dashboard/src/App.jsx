@@ -15,12 +15,7 @@ const App = () => {
     <Router>
       <Routes>
         {/* Public route for the login page */}
-        <Route path="/login" element={<AdminLogin />} />
-
-        {/* Protected admin route */}
-       
-
-        {/* Redirect all unmatched routes to login */}
+        <Route path="/" element={<AdminLogin />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
