@@ -4,7 +4,7 @@ import axios from 'axios';
 // Async Thunk for login
 export const loginUser = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
   try {
-    const response = await axios.post('/api/login', credentials); // Replace with your API endpoint
+    const response = await axios.post('http://localhost:5000/api/admin/login', credentials); // Replace with your API endpoint
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

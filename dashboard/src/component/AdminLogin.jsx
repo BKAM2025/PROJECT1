@@ -1,8 +1,9 @@
 // src/components/AdminLogin.jsx
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAdmin } from "../store/index";
-
+import store from "../store/index.js";
+// const loginAdmin = store.reducer.loginAdmin
+console.log("storeeeeeeeee", store)
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,9 +47,8 @@ const AdminLogin = () => {
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <button
             type="submit"
-            className={`w-full py-2 px-4 bg-blue-500 text-white font-bold rounded-lg ${
-              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
-            }`}
+            className={`w-full py-2 px-4 bg-blue-500 text-white font-bold rounded-lg ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
+              }`}
             disabled={loading}
           >
             {loading ? "Logging in..." : "Login as Admin"}
