@@ -5,9 +5,12 @@ import store from './store'; // Assuming you have a store configured
 import LoginUsers from './componet/LoginUsers';
 import SingUpUser from "./componet/singUpUser"
 import './App.css';
+import Navbar from './componet/navBar';
 
 function App() {
   return (
+    <div>
+    <Navbar/>
     <Provider store={store}>
       <Router>
         <Routes>
@@ -17,7 +20,7 @@ function App() {
           {/* Add more routes as needed */}
         </Routes>
       </Router>
-    </Provider>
+    </Provider></div>
   );
 }
 
