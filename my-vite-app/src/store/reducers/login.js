@@ -7,10 +7,13 @@ export const login = (name, password) => async (dispatch) => {
   dispatch(loginRequest());
   try {
     const response = await axios.post("http://localhost:5000/api/user/login", { name, password });
-    const { user } = response.data;
+    const { user } = response.data; 
+  
+
 
   
     dispatch(loginSuccess({ user }));
+    localStorage.setItem("token",response.data.user.token)
   } catch (error) {
 
     dispatch(loginFailure(error.response?.data?.message || error.message));

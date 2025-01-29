@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store'; // Assuming you have a store configured
 import LoginUsers from './componet/LoginUsers';
-import Navbar from './componet/navBar';
+import SingUpUser from "./componet/singUpUser"
+import './App.css';
 
- 
 function App() {
   return (
     <div>
@@ -14,9 +14,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<LoginUsers />} />
-          {/* <Route path="/signup-admin" element={<SignUpAdmin />} />
-          <Route path="/signup-user" element={<SingUpUser />} />
-          <Route path="/login" element={<LoginUsers />} /> */}
+          {/* {/* <Route path="/signup-user" element={<SingUpUser />} /> */}
+          <Route path="/register" element={<SingUpUser />} /> 
           {/* Add more routes as needed */}
         </Routes>
       </Router>

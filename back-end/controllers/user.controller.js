@@ -43,8 +43,9 @@ login: async (req, res) => {
     res.status(200).send({
       message: "Login successful",
       user: {
-        id: user.id,
-        name: user.name,
+        id: usery.id,
+        name: usery.name,
+        token: jwt.sign({ id: usery.id }, "1234", { expiresIn: "24h" })
       },
     });
 
