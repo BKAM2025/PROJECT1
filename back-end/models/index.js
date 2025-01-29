@@ -58,7 +58,10 @@ const category = connection.define("category", {
 
 
 const cart = connection.define("cart", {
-
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  }
 });
 
 
@@ -75,7 +78,6 @@ const product = connection.define("product", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-
   
   image: {
     type: DataTypes.STRING,
