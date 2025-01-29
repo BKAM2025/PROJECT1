@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 console.log("hello")
-// create a database connection in your application using a Sequelize instance and the config file
+  // create a database connection in your application using a Sequelize instance and the config file
 const connection = new Sequelize(
   "e_commerce",
   "root",

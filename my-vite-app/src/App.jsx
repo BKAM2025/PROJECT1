@@ -1,29 +1,34 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import SignUpAdmin from './componet/singUpAdmin'
-import React ,{ useState } from 'react'
-import SingUpUser from './componet/singUpUser'
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store'; // Assuming you have a store configured
+import LoginUsers from './componet/LoginUsers';
+import SingUpUser from "./componet/singUpUser"
+import './App.css';
 
-
-const App =()=> {
-
-
+function App() {
   return (
-    <div>
-      
-        <SignUpAdmin/>
-      
-  
-        
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-
-      <LoginUsers/>
-    </div>
-
-  )
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginUsers />} />
+          {/* {/* <Route path="/signup-user" element={<SingUpUser />} /> */}
+          <Route path="/register" element={<SingUpUser />} /> 
+          {/* Add more routes as needed */}
+        </Routes>
+      </Router>
+    </Provider>
+  );
 }
 
-export default App
+// A simple Home component for the root path
+function Home() {
+  return (
+    <div>
+      <h1>Welcome to the App</h1>
+      <p>Navigate to different sections using the links above.</p>
+    </div>
+  );
+}
+
+export default App;
