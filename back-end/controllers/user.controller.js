@@ -6,12 +6,12 @@ module.exports = {
   register: async (req, resp) => {
     try {
       const { name, mail, password } = req.body
-      const check = await User.findOne({ where: { mail } })
+      const check = await user.findOne({ where: { mail } })
       if (check) {
         return resp.status(404).send("mail existed")
       }
       const hachPassword = await bcrypt.hash(password, 15)
-      const newuser = await User.create({ name: name, mail: mail, password: hachPassword })
+      const newuser = await user.create({ name: name, mail: mail, password: hachPassword })
       return resp.status(201).send(newuser)
     }
     catch (error) {
@@ -24,17 +24,17 @@ module.exports = {
     const { name, password } = req.body;
 
     try {
-      const user = await User.findOne({ where: { name: username } });
+      const usery = await user.findOne({ where: { name: name } });
       console.log("reached");
 
-      console.log(user);
+      console.log(usery);
 
-      if (!user) {
-        return res.status(404).send({ message: "User not fnameound" });
+      if (!usery) {
+        return res.status(404).send({ message: "User not found" });
       }
 
 
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password, usery.password);
 
 
       if (!isMatch) {
@@ -43,8 +43,9 @@ module.exports = {
       res.status(200).send({
         message: "Login successful",
         user: {
-          id: user.id,
-          username: user.username,
+          id: usery.id,
+          name: usery.name,
+          token: jwt.sign({ id: usery.id }, "1234", { expiresIn: "24h" })
         },
       });
 
