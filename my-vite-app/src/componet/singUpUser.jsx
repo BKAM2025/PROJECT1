@@ -1,10 +1,10 @@
-// src/components/singUpUser.jsx
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../store/reducers/user';
-import axios from "axios"
+import axios from 'axios';
 import { useNavigate } from 'react-router';
 
+const SingUpUser = () => {
 const SingUpUser = () => {
 
   const [name, setName] = useState('');
@@ -14,6 +14,7 @@ const SingUpUser = () => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.user);
   const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(registerUser([name, mail, password]));
@@ -72,6 +73,6 @@ const SingUpUser = () => {
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
-}
+};}
 
 export default SingUpUser;
