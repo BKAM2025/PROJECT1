@@ -34,8 +34,7 @@ module.exports = {
       const { userId } = req.params;
 
       const cartItems = await cart.findAll({
-        where: { userId },
-        include: product
+        where: { userId }
       });
 
       res.status(200).json(cartItems);

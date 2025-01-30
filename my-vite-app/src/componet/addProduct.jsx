@@ -23,15 +23,18 @@ const AddProduct = ({ className = "", user=1 }) => {
       const formData = new FormData();
       formData.append("file", file);
       
+   
       try {
         const response = await axios.post("http://localhost:5000/api/product/upload-image", formData, {
           headers: {
             "Content-Type": "multipart/form-data",  
+            "Content-Type": "multipart/form-data", 
           },
         });
 
         if (response.data.imageUrl) {
           setProduct({ ...product, image: response.data.imageUrl });  
+          setProduct({ ...product, image: response.data.imageUrl }); 
         }
       } catch (error) {
         console.error("Error uploading image:", error);
@@ -51,6 +54,7 @@ const AddProduct = ({ className = "", user=1 }) => {
 
     try {
     
+ 
       const response = await axios.post("http://localhost:5000/api/product/add", {
         ...product,categoryId:1,
         userId: user.id,  
@@ -92,7 +96,7 @@ const AddProduct = ({ className = "", user=1 }) => {
           />
         </div>
 
-        {/* Price Input */}
+     
         <div className="mb-3">
           <label htmlFor="price" className="form-label">Price ($)</label>
           <input 
@@ -106,7 +110,7 @@ const AddProduct = ({ className = "", user=1 }) => {
           />
         </div>
 
-        {/* Description Input */}
+      
         <div className="mb-3">
           <label htmlFor="description" className="form-label">Description</label>
           <textarea 
@@ -118,7 +122,7 @@ const AddProduct = ({ className = "", user=1 }) => {
           ></textarea>
         </div>
 
-        {/* Image Input (Uploads directly to your backend) */}
+        
         <div className="mb-3">
           <label htmlFor="image" className="form-label">Image</label>
           <input 
@@ -132,7 +136,7 @@ const AddProduct = ({ className = "", user=1 }) => {
           {product.image && <img src={product.image} alt="Product Preview" className="mt-3 img-fluid" />}
         </div>
 
-        {/* Stock Input */}
+     
         <div className="mb-3">
           <label htmlFor="stock" className="form-label">Stock Quantity</label>
           <input 
@@ -145,7 +149,7 @@ const AddProduct = ({ className = "", user=1 }) => {
           />
         </div>
 
-        {/* Submit Button */}
+      
         <button 
           type="submit" 
           className="btn btn-primary w-100"
