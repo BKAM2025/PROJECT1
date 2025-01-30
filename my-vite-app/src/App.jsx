@@ -1,27 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-// import AdminLogin from "./component/AdminLogin.jsx";
-import Home from "./componet/home"
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store';
+import LoginUsers from './componet/LoginUsers.jsx';
+import SingUpUser from "./componet/singUpUser.jsx"
+import Navbar from './componet/navBar.jsx';
+// import Home from "./componet/home.jsx"
+import './App.css';
 
-
-import { useSelector } from "react-redux";
-
-const App = () => {
-  const { token } = useSelector((state) => state.auth);
-
+function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public route for the login page */}
-        {/* <Route path="/" element={<AdminLogin />} /> */}
-        <Route path="/home" element={<Home />} />
-      </Routes>
-    </Router>
+  <div>
+    {/* <Navbar/> */}
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginUsers />} />
+          <Route path="/register" element={<SingUpUser />} /> 
+          <Route path="/home" element={< Navbar />}  /> 
+
+        </Routes>
+      </Router>
+    </Provider>
+    </div>
   );
-};
+
+}
+
+
 
 export default App;
