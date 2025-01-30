@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import axios from "axios";
 import { FilePlus } from "lucide-react";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
 import "../AddProduct.css";
 
-const AddProduct = ({ className = "" }) => {
+const AddProduct = ({ className = "" ,fetch}) => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [currentId, setCurrent] = useState(null);
-  console.log(cartItems, "cartItems") ;
+  console.log("currentId",currentId) ;
   const [product, setProduct] = useState({
     name: "",
     price: "",
@@ -16,7 +19,7 @@ const AddProduct = ({ className = "" }) => {
     userId:currentId
   });
   
-  console.log(cartItems, "cartItems") ;
+  console.log("currentId",currentId) ;
   const getUserIdFromToken = async() => {
     try {
       const token = await localStorage.getItem('token')
@@ -73,6 +76,8 @@ const AddProduct = ({ className = "" }) => {
       } else {
         alert("Error adding product");
       }
+      fetch();
+      navigate('/home');
     } catch (error) {
       console.error("Network error:", error);
       alert("Network error. Please try again.");

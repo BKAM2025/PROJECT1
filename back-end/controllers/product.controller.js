@@ -38,7 +38,7 @@ const addProduct = async (req, res) => {
       categoryId,
     });
 
-    return res.status(201).send({ message: "Product added successfully", newProduct });
+    return res.status(200).send({ message: "Product added successfully", newProduct });
   } catch (error) {
     console.error("Error adding product:", error);
     return res.status(500).json({ message: "Error adding product", error });
