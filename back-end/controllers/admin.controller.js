@@ -1,7 +1,7 @@
-const { admin } = require("../models/index")
+const { admin, product, user } = require("../models/index")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-
+console.log("hello")
 module.exports = {
   register: async (req, resp) => {
     try {
@@ -11,7 +11,7 @@ module.exports = {
         return resp.status(404).send("mail existed")
       }
       const hachPassword = await bcrypt.hash(password, 15)
-      const newadmin = await admin.create({ name: name, mail: mail, password: hachPassword })
+      const newadmin = await admin.create({ name, mail, password: hachPassword })
       return resp.status(201).send(newadmin)
     }
     catch (error) {
@@ -47,21 +47,15 @@ module.exports = {
   //     res.send(admin);
   //   } catch (error) {}
   // },
-
-
-  deleted: (req, res) => {
-    admin.destroy({
-      where: {
-        id: req.params.id
-      }
-    })
-      .then(() => {
-        res.status(200).json({ message: "delete admin" });
-      })
-      .catch((error) => {
-        res.status(500).json({ message: 'error to delete admin', error });
-      });
-  },
+  getALLusers: async (req, res) => {
+    try {
+      const allusers = user.findAll({ where: { userId: null } })
+      res.status(200).send({ "this is your app users:": allusers })
+    } catch (err) {
+      console.log("err", err)
+      res.status(400).send({ "message": err })
+    }
+  }
 };
 
 
