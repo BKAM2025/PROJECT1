@@ -1,17 +1,19 @@
-
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
 
-export const login = (name,mail, password) => async (dispatch) => {
+export const login = (name, password) => async (dispatch) => {
   dispatch(loginRequest());
   try {
-    const response = await axios.post("http://localhost:5000/admin/login", { name,mail, password });
-    const { admin } = response.data;
+    const response = await axios.post("http://localhost:5000/api/admin/login", { name, password });
+    const { user } = response.data; 
+   
+
 
   
-    dispatch(loginSuccess({ admin }));
+    dispatch(loginSuccess({ user }));
+    localStorage.setItem("token",response.data.user.token)
   } catch (error) {
 
     dispatch(loginFailure(error.response?.data?.message || error.message));
@@ -20,7 +22,7 @@ export const login = (name,mail, password) => async (dispatch) => {
 
 
 const initialState = {
-  admin: null,
+  user: null,
   token: null,
   isAuthenticated: false,
   loading: false,
@@ -36,7 +38,7 @@ const authSlice = createSlice({
       state.error = null;
     },
     loginSuccess: (state, action) => {
-      state.admin = action.payload.admin;
+      state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
       state.loading = false;
@@ -47,7 +49,7 @@ const authSlice = createSlice({
       state.error = action.payload;
     },
     logout: (state) => {
-      state.admin = null;
+      state.user = null;
       state.token = null;
       state.isAuthenticated = false;
     },

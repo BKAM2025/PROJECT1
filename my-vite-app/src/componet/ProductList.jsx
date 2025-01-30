@@ -12,7 +12,7 @@ const ProductList = ({ products, handleOneProduct }) => {
     <div className="product-list">
       {products.map((element, i) => (
         <ProductDetails
-          handleOneProduct={handleOneProduct}  // Pass down handleOneProduct
+          handleOneProduct={handleOneProduct}
           element={element}
           key={i}
         />

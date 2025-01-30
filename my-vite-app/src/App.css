@@ -575,7 +575,7 @@ body {
   transform: scale(1.05);
 }
 
-
+/* Responsive Design */
 @media (max-width: 768px) {
   .product-container {
     padding: 20px;
@@ -627,9 +627,10 @@ body {
   text-decoration: underline;
 }
 .footer-image {
-  max-width: 150px;
-  height: auto;    
-  display: block;  
-  margin: 0 auto;   
+  max-width: 150px; /* Set a maximum width for the image */
+  height: auto;     /* Keep aspect ratio */
+  display: block;   /* Center image if needed */
+  margin: 0 auto;   /* Optional: centers the image horizontally */
 }
 
+  
