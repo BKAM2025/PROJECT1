@@ -6,6 +6,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AdminLogins from "./component/AdminLogin.jsx";
 import AdminDashboard from "./component/AdminDashboard.jsx";
+import NavBar from "./component/NavBar.jsx";
 
 const App = () => {
   // Access auth state from Redux

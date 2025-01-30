@@ -1,9 +1,9 @@
 import React from 'react'
-
+import NavBar from './NavBar.jsx';
 function AdminDashboard() {
   return (
     <div>
-      <p>hiiiii dashhhhhh</p>
+      <NavBar />
     </div>
   )
 }
