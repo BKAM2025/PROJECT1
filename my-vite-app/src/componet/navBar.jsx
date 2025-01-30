@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { filterProductByQuery } from '../store/reducers/product.js';
-
+import {Heart, ShoppingCart, User } from "lucide-react"
 const Navbar = () => {
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");  // State to hold the search query
@@ -35,6 +35,9 @@ const Navbar = () => {
         </form>
 
         <a href="/addProduct" className="add-product-btn">Add Product</a>
+        <a href="/favorites"><Heart size={22} className="icon" /></a>
+        <a href="/cart"><ShoppingCart size={22} className="icon" /></a>
+        <a href="/profile"><User size={22} className="icon" /></a>
       </div>
     </nav>
   );
