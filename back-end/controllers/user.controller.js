@@ -33,9 +33,7 @@ module.exports = {
     const { mail, password } = req.body;
 
     try {
-      const userr = await user.findOne({ where: { mail: mail } });
-
-
+      const userr = await user.findOne({ where: { mail } });
       console.log(userr);
 
       if (!userr) {
@@ -55,9 +53,6 @@ module.exports = {
           token: jwt.sign({ id: userr.id }, "1234", { expiresIn: "24h" })
         },
       });
-      if (!isMatch) {
-        return res.status(401).send({ message: "Invalid credentials" });
-      }
 
     } catch (error) {
       console.error(error);
