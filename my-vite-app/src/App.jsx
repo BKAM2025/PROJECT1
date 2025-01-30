@@ -46,7 +46,7 @@ function App() {
           <Route path="/register" element={<SingUpUser />} />
           
           
-          <Route path="/home" element={<ProductList products={product} handleOneProduct={handleOneProduct} />} />
+          {/* <Route path="/home" element={<ProductList products={product} handleOneProduct={handleOneProduct} />} /> */}
           
           
           <Route path="/product/:id" element={<OneProduct product={selectedProduct} />} />
