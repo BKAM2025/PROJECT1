@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 console.log("hello")
-// create a database connection in your application using a Sequelize instance and the config file
+  // create a database connection in your application using a Sequelize instance and the config file
 const connection = new Sequelize(
   "e_commerce",
   "root",
@@ -107,14 +107,14 @@ cart.belongsTo(product)
 //   .catch((error) => {
 //     console.error("Unable to create table : ", error);
 //   });
-async function testconnection() {
-  try {
-    await connection.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-}
-testconnection()
+// async function testconnection() {
+//   try {
+//     await connection.authenticate();
+//     console.log('Connection has been established successfully.');
+//   } catch (error) {
+//     console.error('Unable to connect to the database:', error);
+//   }
+// }
+// testconnection()
 // export your Model car below
 module.exports = { user, cart, category, admin, product };

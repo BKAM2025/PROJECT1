@@ -24,7 +24,7 @@ login: async (req, res) => {
   const { name, password } = req.body;
 
   try {
-    const usery = await user.findOne({ where: { name: name} });
+    const usery = await user.findOne({ where: { name: name } });
     console.log("reached");
 
     console.log(usery);
