@@ -1,18 +1,40 @@
-import React from "react";
-// import {useNavigate } from 'react-router-dom';
-  
-import { Search, Heart, ShoppingCart, User } from "lucide-react";
+import React ,{useState, useEffect}from "react";
+import {useNavigate } from 'react-router-dom';
+
+import {  Heart, ShoppingCart, User } from "lucide-react";
+
 // import "./Navbar.css"; // Import the CSS file
 
 
 // const navigate = useNavigate();
-const Navbar = () => {
+const Navbar = ({products,fetch}) => {
+  const [query, setQuery] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const navigate = useNavigate("");  
+  const handleSearch = () => {
+
+    if (query.trim()) {
+      const resultfilter = products.filter((product) =>
+        product.name.toLowerCase().includes(setQuery.toLowerCase())
+      );
+      setFilteredProducts(resultfilter)
+    }
+
+    if (selectedCategory) {
+      filteredProducts = filteredProducts.filter((product) =>
+        product.CategoryId === selectedCategory
+      );
+    }
+
+    return filteredProducts;
+  };
+
   return (
    
     <nav className="navbar">
      
       <div className="nav-links">
-        <a href="/">Home</a>
+        <a href="/home">Home</a>
         <a href="/contact">Contact</a>
         <a href="/about">About</a>
 
@@ -21,14 +43,18 @@ const Navbar = () => {
       </div>
 
       <div className="nav-right">
-      
-        <div className="search-container">
-          <input type="text" placeholder="Search..." className="search-input" />
-          <button className="search-btn">
-            <Search size={18} />
-          </button>
-        </div>
-
+      <form className="d-flex" role="search">
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search by name"
+                aria-label="Search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button className="btn btn-outline-secondary" type="button" onClick={() => {handleSearch(),console.log("filter done",filteredProducts)}}>Search</button>
+            </form>
+         
       
         <a href="/addProduct" className="add-product-btn">Add Product</a>
 

@@ -10,7 +10,7 @@ const ProductList = ({ products, handleOneProduct }) => {
 
   return (
     <div>
-      <Navbar />
+      <Navbar products={products} />
       <div className="product-list">
         {products.map((element, i) => (
           <ProductDetails
