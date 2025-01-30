@@ -14,24 +14,21 @@ const SingUpUser = () => {
   const { status, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(registerUser([name, mail, password]));
-    axios.post('http://localhost:5000/api/user/register', {
-      name,
-      mail,
-      password
-
-    })
-      .then((response) => {
-        console.log("Response", response);
-        navigate("/home");
+    try {
+      e.preventDefault();
+      dispatch(registerUser([name, mail, password]));
+      axios.post('http://localhost:5000/api/user/register', {
+        name,
+        mail,
+        password
       })
-      .catch((error) => {
-
-        if (error.response) {
-          error(error.response.data.message);
-        }
-      });
+      then(() => navigate("/home"))
+    }
+    catch (error) {
+      if (error.response) {
+        console.error("Error:", error.response.data.message);
+      }
+    };
   };
 
 
@@ -73,7 +70,7 @@ const SingUpUser = () => {
           {status === 'loading' ? 'Signing Up...' : 'Sign Up'}
         </button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: 'red' }}>{error.message || error}</p>}
     </div>
   );
 }
