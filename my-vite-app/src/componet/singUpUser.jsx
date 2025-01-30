@@ -1,4 +1,3 @@
-// src/components/singUpUser.jsx
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../store/reducers/user';
@@ -10,31 +9,30 @@ const SingUpUser = () => {
   const [name, setName] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
   const dispatch = useDispatch();
-  const { status, error } = useSelector((state) => state.user);
+  const { status } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const handleSubmit = (e) => {
-    try {
-      e.preventDefault();
-      dispatch(registerUser([name, mail, password]));
-      axios.post('http://localhost:5000/api/user/register', {
-        name,
-        mail,
-        password
+    e.preventDefault();
+    dispatch(registerUser([name, mail, password]));
+    axios.post('http://localhost:5000/api/user/register', {
+      name,
+      mail,
+      password
+    })
+      .then(() => {
+        navigate("/home");
       })
-      then(() => navigate("/home"))
-    }
-    catch (error) {
-      if (error.response) {
-        console.error("Error:", error.response.data.message);
-      }
-    };
+      .catch((error) => {
+        if (error.response) {
+          console.error("Error:", error.response.data.message);
+          setErrorMessage(error.response.data.message);
+        } else {
+          setErrorMessage("An unexpected error occurred.");
+        }
+      });
   };
-
-
-
-
-
   return (
     <div>
       <h2>Sign Up</h2>
@@ -70,7 +68,7 @@ const SingUpUser = () => {
           {status === 'loading' ? 'Signing Up...' : 'Sign Up'}
         </button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error.message || error}</p>}
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
 }

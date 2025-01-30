@@ -27,8 +27,7 @@ const AddProduct = ({ className = "", user=1 }) => {
       try {
         const response = await axios.post("http://localhost:5000/api/product/upload-image", formData, {
           headers: {
-            "Content-Type": "multipart/form-data",  
-            "Content-Type": "multipart/form-data", 
+            "Content-Type": "multipart/form-data",   
           },
         });
 

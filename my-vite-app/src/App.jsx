@@ -9,6 +9,7 @@ import OneProduct from './componet/OneProduct.jsx';
 import axios from 'axios';
 import AddProduct from './componet/addProduct.jsx';
 // import Home from "./componet/home.jsx"
+import CartList from './componet/cart.jsx';
 import './App.css';
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
             <Route path="/product/:id" element={<OneProduct product={selectedProduct} />} />
             <Route path="/register" element={<SingUpUser />} />
             <Route path="/addProduct" element={< AddProduct />} />
+            <Route path="/cart" element={< CartList />} />
           </Routes>
         </Router>
       </Provider>

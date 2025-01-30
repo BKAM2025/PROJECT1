@@ -32,13 +32,7 @@ const OneProduct = ({ product }) => {
     }
   };
 
-  if (!product) {
-    return <p>Product not found</p>;
-  }
-
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
+  
 
   
   
@@ -47,12 +41,19 @@ const OneProduct = ({ product }) => {
     fetchCartItems();
     getUserIdFromToken()
   }, []);
-  console.log("❤️❤️❤️",currentId)
-  
 
-  const fetchCartItems = async (currentId) => {
+  console.log("❤️❤️❤️",currentId)
+  if (!product) {
+    return <p>Product not found</p>;
+  }
+
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite);
+  };
+
+  const fetchCartItems = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/cart/get/${currentId}`);
+      const response = await axios.get(`http://localhost:5000/api/cart/get`);
       setCartItems(response.data);
     } catch (error) {
       console.error('Failed to fetch cart items:', error);

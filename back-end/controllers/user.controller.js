@@ -7,17 +7,16 @@ module.exports = {
     try {
       const { name, mail, password } = req.body;
 
-    
+      
       const check = await user.findOne({ where: { mail } });
       if (check) {
         
         return resp.status(409).send("Email already exists");
       }
 
-      // Hash the password before saving it to the database
       const hashedPassword = await bcrypt.hash(password, 15);
 
-      // Create a new user in the database
+     
       const newUser = await user.create({ name: name, mail: mail, password: hashedPassword });
 
       // Respond with the created user object

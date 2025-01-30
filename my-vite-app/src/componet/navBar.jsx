@@ -4,9 +4,11 @@ import React from "react";
 import { Search, Heart, ShoppingCart, User } from "lucide-react";
 // import "./Navbar.css"; // Import the CSS file
 
+import { useNavigate } from 'react-router';
 
 // const navigate = useNavigate();
 const Navbar = () => {
+  const navigate=useNavigate()
   return (
 
     <nav className="navbar">
@@ -33,7 +35,7 @@ const Navbar = () => {
         <a href="/addProduct" className="add-product-btn">Add Product</a>
 
         <a href="/favorites"><Heart size={22} className="icon" /></a>
-        <a href="/cart"><ShoppingCart size={22} className="icon" /></a>
+        <a href="/cart"><ShoppingCart size={22} className="icon" onClick={()=>{navigate("/cart")}}/></a>
         <a href="/profile"><User size={22} className="icon" /></a>
 
       </div>
