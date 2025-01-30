@@ -2,10 +2,12 @@ import React from "react";
 import { Search, Heart, ShoppingCart, User } from "lucide-react";
 // import "./Navbar.css"; // Import the CSS file
 
+
 const Navbar = () => {
   return (
+   
     <nav className="navbar">
-      {/* Left Section */}
+     
       <div className="nav-links">
         <a href="/">Home</a>
         <a href="/contact">Contact</a>
@@ -13,7 +15,6 @@ const Navbar = () => {
 
       </div>
 
-      {/* Right Section */}
       <div className="nav-right">
         {/* Search */}
         <div className="search-container">
@@ -23,10 +24,11 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Icons */}
+     
         <a href="/favorites"><Heart size={22} className="icon" /></a>
         <a href="/cart"><ShoppingCart size={22} className="icon" /></a>
         <a href="/profile"><User size={22} className="icon" /></a>
+       
       </div>
     </nav>
   );

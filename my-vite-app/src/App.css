@@ -40,6 +40,116 @@
 .read-the-docs {
   color: #888;
 }
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%; 
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  z-index: 1000;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: blue;
+}
+
+
+.signup-btn {
+  background-color: blue;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.signup-btn:hover {
+  background-color: darkblue;
+}
+
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+
+.search-container {
+  position: relative;
+}
+
+.search-input {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 150px;
+}
+
+.search-btn {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+
+.icon {
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.icon:hover {
+  color: blue;
+}
+
+
+body {
+  padding-top: 70px;
+}
+
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    text-align: center;
+    width: 90%;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-right {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
 
 /* 📌 Navbar Styling */
 .navbar {
@@ -232,3 +342,294 @@ body {
 .view-details-btn:hover {
   background-color: #0056b3;
 }
+/* General Styling for Product Details Page */
+.product-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-content {
+  display: flex;
+  gap: 40px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.product-image-container {
+  flex: 1;
+  max-width: 500px;
+  text-align: center;
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-image:hover {
+  transform: scale(1.05);
+}
+
+/* Styling for Product Details */
+.product-details {
+  flex: 1;
+  max-width: 500px;
+  text-align: left;
+  padding-top: 10px;
+}
+
+.product-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #2e8b57;
+  margin-bottom: 10px;
+}
+
+.product-description {
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.product-stock {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.in-stock {
+  color: #28a745;
+}
+
+.out-of-stock {
+  color: #dc3545;
+}
+
+/* Star Rating */
+.product-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.star-rating {
+  display: flex;
+  margin-right: 10px;
+}
+
+.filled-star,
+.empty-star {
+  font-size: 1.5rem;
+  color: #ffd700;
+}
+
+.empty-star {
+  color: #ccc;
+}
+
+.rating-count {
+  font-size: 1rem;
+  color: #777;
+}
+
+/* Color Options */
+.color-options {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.color-swatches {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.color-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #ccc;
+  transition: transform 0.3s ease;
+}
+
+.color-swatch.selected {
+  border: 2px solid #333;
+  transform: scale(1.1);
+}
+
+/* Size Options */
+.size-options {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.size-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.size-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.size-btn.selected {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.size-btn:hover {
+  background-color: #007bff;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Favorite Button */
+.favorite-btn {
+  margin-top: 15px;
+}
+
+.heart-icon {
+  font-size: 2rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.heart-icon.favorite {
+  color: #ff3366;
+}
+
+
+.free-delivery {
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.free-delivery span {
+  text-transform: uppercase;
+}
+
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.add-to-cart-btn,
+.buy-now-btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.add-to-cart-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.buy-now-btn {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.buy-now-btn:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+
+@media (max-width: 768px) {
+  .product-container {
+    padding: 20px;
+  }
+
+  .product-title {
+    font-size: 1.5rem;
+  }
+
+  .product-price {
+    font-size: 1.3rem;
+  }
+
+  .product-description {
+    font-size: 0.9rem;
+  }
+
+  .color-swatches {
+    flex-wrap: wrap;
+  }
+
+  .size-buttons {
+    flex-wrap: wrap;
+  }
+}
+.footer {
+  background-color: #f8f8f8;
+  padding: 0px;
+  text-align: center;
+  border-top: 1px solid #ddd;
+}
+
+.footer-content {
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.footer p {
+  font-size: 14px;
+  color: #333;
+}
+
+.footer a {
+  color: #0073e6;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+.footer-image {
+  max-width: 150px;
+  height: auto;    
+  display: block;  
+  margin: 0 auto;   
+}
+

@@ -1,22 +1,24 @@
 import React from "react";
-import ProductDetails from "./ProductDetails"
-    
+import ProductDetails from "./ProductDetails";
 
+const ProductList = ({ products, handleOneProduct }) => {
+  console.log("Received products in ProductList:", products);
 
+  if (!Array.isArray(products) || products.length === 0) {
+    return <p>No products available</p>;
+  }
 
-    const ProductList = ({ProductList,handleOneProduct}) =>{
-        console.log("allPosts",ProductList);
-        
-        
-        return(
-       
-            ProductList.map((element,i) =>(
-       
-                <ProductDetails  handleOnePost={handleOneProduct} element={element} key={i}/>
-            )))}
-      
+  return (
+    <div className="product-list">
+      {products.map((element, i) => (
+        <ProductDetails
+          handleOneProduct={handleOneProduct}  // Pass down handleOneProduct
+          element={element}
+          key={i}
+        />
+      ))}
+    </div>
+  );
+};
 
-
-            
-
-export default  ProductList
+export default ProductList;
