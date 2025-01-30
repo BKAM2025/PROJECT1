@@ -43,7 +43,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginUsers />} />
             <Route path="/register" element={<SingUpUser />} />
-            <Route path="/home" element={<ProductList products={product} handleOneProduct={handleOneProduct} />} />
+            <Route path="/home" element={<ProductList  handleOneProduct={handleOneProduct} />} />
             <Route path="/product/:id" element={<OneProduct product={selectedProduct} />} />
             <Route path="/register" element={<SingUpUser />} />
             <Route path="/addProduct" element={< AddProduct />} />
