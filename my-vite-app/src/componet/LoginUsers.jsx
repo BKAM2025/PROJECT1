@@ -17,20 +17,22 @@ function LoginUsers() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(login(mail, password));
-    axios.post("http://localhost:5000/api/user/login", { mail, password })
-      .then((response) => {
-        console.log("Response", response);
-        navigate("/home");
-      })
-      .catch((error) => {
+    try {
+      console.log({ mail, password });
 
-        if (error.response) {
-          setError(error.response.data.message);
-        }
-      });
+      var response = await axios.post("http://localhost:5000/api/user/login", { mail, password })
+      console.log(response);
+      localStorage.setItem("token", response.data.user.token)
+      navigate("/home");
+    }
+    catch (error) {
+      throw error
+    }
+
+    ;
   };
 
 
