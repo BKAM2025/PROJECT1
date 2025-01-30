@@ -16,6 +16,6 @@ App.use("/api/user", userRoute)
 App.use("/api/admin", RouterAdmin)
 App.use("/api/cart", RouterCart)
 App.use("/api/product", RouterProduct)
-App.listen(port, () => {
-  console.log(`app listening on http://127.0.0.1:${port}`);
-});
+// App.listen(port, () => {
+//   console.log(`app listening on http://127.0.0.1:${port}`);
+// });
