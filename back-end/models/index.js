@@ -21,6 +21,10 @@ const user = connection.define("user", {
   mail: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true
+    }
   },
   password: {
     type: DataTypes.STRING,
@@ -99,21 +103,12 @@ cart.belongsTo(product)
 
 // this call, Sequelize will automatically perform an SQL query to the database and create a table, printing the message car table created successfully!.
 // connection
-//   .sync({ force: true })
+//   .sync({ force: false })
 //   .then(() => {
 //     console.log("car table created successfully!");
 //   })
 //   .catch((error) => {
 //     console.error("Unable to create table : ", error);
 //   });
-async function testconnection() {
-  try {
-    await connection.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-}
-testconnection()
-// export your Model car below
+
 module.exports = { user, cart, category, admin, product };

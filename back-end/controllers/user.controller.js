@@ -21,33 +21,34 @@ module.exports = {
 
   },
   login: async (req, res) => {
-    const { name, password } = req.body;
+    const { mail, password } = req.body;
 
     try {
-      const usery = await user.findOne({ where: { name: name } });
-      console.log("reached");
+      const userr = await user.findOne({ where: { mail: mail } });
 
-      console.log(usery);
 
-      if (!usery) {
+      console.log(userr);
+
+      if (!userr) {
         return res.status(404).send({ message: "User not found" });
       }
 
 
-      const isMatch = await bcrypt.compare(password, usery.password);
+      const isMatch = await bcrypt.compare(password, userr.password);
 
 
-      if (!isMatch) {
-        return res.status(401).send({ message: "Invalid credentials" });
-      }
+
       res.status(200).send({
         message: "Login successful",
         user: {
-          id: usery.id,
-          name: usery.name,
-          token: jwt.sign({ id: usery.id }, "1234", { expiresIn: "24h" })
+          id: userr.id,
+          mail: userr.mail,
+          token: jwt.sign({ id: userr.id }, "1234", { expiresIn: "24h" })
         },
       });
+      if (!isMatch) {
+        return res.status(401).send({ message: "Invalid credentials" });
+      }
 
     } catch (error) {
       console.error(error);
