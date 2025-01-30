@@ -1,7 +1,4 @@
 const { product } = require("../models/index")
-
-
-const { product } = require("../models/index");
 const multer = require("multer");
 const path = require("path");
 

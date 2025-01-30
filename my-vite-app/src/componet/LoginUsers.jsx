@@ -7,7 +7,7 @@ import axios from "axios";
 
 function LoginUsers() {
   const dispatch = useDispatch();
-  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated, user } = useSelector((state) => state.login);
 
   // State for form inputs
   const [name, setName] = useState("");

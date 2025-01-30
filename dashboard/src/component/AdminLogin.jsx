@@ -70,6 +70,5 @@ const AdminLogins = () => {
   );
 }
 
-export default LoginUsers;
 
 export default AdminLogins;
