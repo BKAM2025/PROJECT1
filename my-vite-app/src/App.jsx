@@ -5,6 +5,7 @@ import store from './store';
 import LoginUsers from './componet/LoginUsers.jsx';
 import SingUpUser from "./componet/singUpUser.jsx"
 import Navbar from './componet/navBar.jsx';
+import AddProduct from './componet/addProduct.jsx';
 // import Home from "./componet/home.jsx"
 import './App.css';
 
@@ -18,7 +19,7 @@ function App() {
           <Route path="/" element={<LoginUsers />} />
           <Route path="/register" element={<SingUpUser />} /> 
           <Route path="/home" element={< Navbar />}  /> 
-       
+          <Route path="/addProduct" element={< AddProduct />}  /> 
         </Routes>
       </Router>
     </Provider>
