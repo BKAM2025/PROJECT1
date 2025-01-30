@@ -7,17 +7,16 @@ module.exports = {
     try {
       const { name, mail, password } = req.body;
 
-      // Check if the mail already exists in the database
+      
       const check = await user.findOne({ where: { mail } });
       if (check) {
-        // Conflict status code (409) is more appropriate here
+        
         return resp.status(409).send("Email already exists");
       }
 
-      // Hash the password before saving it to the database
       const hashedPassword = await bcrypt.hash(password, 15);
 
-      // Create a new user in the database
+     
       const newUser = await user.create({ name: name, mail: mail, password: hashedPassword });
 
       // Respond with the created user object
