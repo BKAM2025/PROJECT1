@@ -2,6 +2,7 @@ import React, { useState,useEffect } from "react";
 import { FaHeart } from 'react-icons/fa'; 
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode"
+import { use } from "react";
 
 // import getUserIdFromToken from "../middlwares/getIdFromToken";
 
@@ -24,7 +25,7 @@ const OneProduct = ({ product }) => {
       setCurrent(id)
     console.log( "my id👌👌",id);
 
-      // alert("done"); // Adjust this based on your token structure
+ 
     } catch (error) {
       console.error('Failed to decode token:', error);
       return null;
@@ -46,12 +47,12 @@ const OneProduct = ({ product }) => {
     fetchCartItems();
     getUserIdFromToken()
   }, []);
-  // console.log("❤️❤️❤️",currentId)
+  console.log("❤️❤️❤️",currentId)
   
 
-  const fetchCartItems = async () => {
+  const fetchCartItems = async (currentId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/cart/get/${1}`);
+      const response = await axios.get(`http://localhost:5000/api/cart/get/${currentId}`);
       setCartItems(response.data);
     } catch (error) {
       console.error('Failed to fetch cart items:', error);
@@ -61,7 +62,7 @@ const OneProduct = ({ product }) => {
   const addToCart = async (productId) => {
     try {
       await axios.post('http://localhost:5000/api/cart/add', {
-        userId: currentId, // Replace with actual user ID
+        userId: currentId,    
         productId: productId,
       });
       alert('Product added to cart');
