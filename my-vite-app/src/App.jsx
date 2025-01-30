@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import store from './store';
 import LoginUsers from './componet/LoginUsers.jsx';
 import SingUpUser from "./componet/singUpUser.jsx";
-import Navbar from './componet/navBar.jsx';
 import ProductList from './componet/ProductList.jsx';
 import OneProduct from './componet/OneProduct.jsx';
 import axios from 'axios';
@@ -16,7 +15,7 @@ function App() {
   const [product, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  
+
   const fetchProduct = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/product/getAll");
@@ -27,35 +26,31 @@ function App() {
     }
   };
 
- 
+
   useEffect(() => {
     fetchProduct();
   }, []);
 
-  
+
   const handleOneProduct = (product) => {
-    setSelectedProduct(product); 
+    setSelectedProduct(product);
   };
 
   return (
-    <Provider store={store}>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<LoginUsers />} />
-          <Route path="/register" element={<SingUpUser />} />
-          
-          
-          {/* <Route path="/home" element={<ProductList products={product} handleOneProduct={handleOneProduct} />} /> */}
-          
-          
-          <Route path="/product/:id" element={<OneProduct product={selectedProduct} />} />
-          <Route path="/register" element={<SingUpUser />} /> 
-          <Route path="/home" element={< Navbar />}  /> 
-          <Route path="/addProduct" element={< AddProduct />}  /> 
-        </Routes>
-      </Router>
-    </Provider>
+    <div>
+      <Provider store={store}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LoginUsers />} />
+            <Route path="/register" element={<SingUpUser />} />
+            <Route path="/home" element={<ProductList products={product} handleOneProduct={handleOneProduct} />} />
+            <Route path="/product/:id" element={<OneProduct product={selectedProduct} />} />
+            <Route path="/register" element={<SingUpUser />} />
+            <Route path="/addProduct" element={< AddProduct />} />
+          </Routes>
+        </Router>
+      </Provider>
+    </div>
   );
 }
 
