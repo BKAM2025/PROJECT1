@@ -1,15 +1,35 @@
 import React, { useState,useEffect } from "react";
 import { FaHeart } from 'react-icons/fa'; 
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode"
+
+// import getUserIdFromToken from "../middlwares/getIdFromToken";
 
 const OneProduct = ({ product }) => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [currentId, setCurrent] = useState(null);
   console.log(cartItems, "cartItems") ;
 
+  const getUserIdFromToken = async() => {
+    
+    try {
+      const token = await localStorage.getItem('token')
+      console.log( "token👌👌",token);
+      
+      if (!token) return null;
+      const {id} =await jwtDecode(token);
+      setCurrent(id)
+    console.log( "my id👌👌",id);
 
+      // alert("done"); // Adjust this based on your token structure
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+      return null;
+    }
+  };
 
   if (!product) {
     return <p>Product not found</p>;
@@ -24,7 +44,10 @@ const OneProduct = ({ product }) => {
 
   useEffect(() => {
     fetchCartItems();
+    getUserIdFromToken()
   }, []);
+  // console.log("❤️❤️❤️",currentId)
+  
 
   const fetchCartItems = async () => {
     try {
@@ -35,12 +58,11 @@ const OneProduct = ({ product }) => {
     }
   };
 
-  const addToCart = async () => {
+  const addToCart = async (productId) => {
     try {
       await axios.post('http://localhost:5000/api/cart/add', {
-        userId: '1', // Replace with actual user ID
-        productId: product.id,
-        quantity: 1
+        userId: currentId, // Replace with actual user ID
+        productId: productId,
       });
       alert('Product added to cart');
     } catch (error) {
@@ -87,7 +109,6 @@ const OneProduct = ({ product }) => {
 
           <p className="product-description">{product.description}</p>
           <p className={`product-stock ${product.stock > 0 ? "in-stock" : "out-of-stock"}`}>
-            {product.stock > 0 ? `In Stock: ${product.stock}` : "Out of Stock"}
           </p>
 
           <div className="favorite-btn">
@@ -102,7 +123,7 @@ const OneProduct = ({ product }) => {
           </div>
 
           <div className="action-buttons">
-            <button className="add-to-cart-btn" onClick={()=>(addToCart())}  >Add to Cart</button>
+            <button className="add-to-cart-btn" onClick={()=>(addToCart(product.id))}  >Add to Cart</button>
             <button className="buy-now-btn">Buy Now</button>
           </div>
         </div>

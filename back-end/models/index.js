@@ -60,10 +60,7 @@ const category = connection.define("category", {
 
 
 const cart = connection.define("cart", {
-  quantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  }
+ 
 });
 
 

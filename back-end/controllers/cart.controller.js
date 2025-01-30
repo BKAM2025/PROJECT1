@@ -3,7 +3,7 @@ const { cart, product} = require("../models/index");
 module.exports = {
   addToCart: async (req, res) => {
     try {
-      const { userId, productId, quantity } = req.body;
+      const { userId, productId} = req.body;
 
     
       const foundProduct = await product.findByPk(productId);
