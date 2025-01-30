@@ -1,7 +1,9 @@
 
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../store/reducers/login"
+import { login } from "../store/reducers/login";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function LoginUsers() {
   const dispatch = useDispatch();
@@ -10,16 +12,30 @@ function LoginUsers() {
   // State for form inputs
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(name, password)); // Dispatch login action
+    dispatch(login(name, password)); 
+    axios.post("http://localhost:5000/api/user/login", { name, password })
+    .then((response) => {
+      console.log("Response", response);
+      navigate("/home"); 
+    })
+    .catch((error) => {
+  
+      if (error.response) {
+        setError(error.response.data.message);
+      }
+    });
   };
+  
 
   // If user is authenticated, redirect them or show a message
-  if (isAuthenticated) {
-    return <div>Welcome back, {name}!</div>;
-  }
+  // if (isAuthenticated) {
+  //   return <div>Welcome back, {name}!</div>;
+  // }
 
   return (
     <div>
@@ -53,9 +69,15 @@ function LoginUsers() {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-
+      <div className="text-center mt-3">
+            <p>
+              Don't have an account?{" "}
+              <a href="#" onClick={() => navigate("/register")}>Create a new user</a>
+            </p>
+          </div>
       {error && <div style={{ color: "red" }}>{error}</div>}
     </div>
+    
   );
 }
 

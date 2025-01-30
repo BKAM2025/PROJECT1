@@ -5,6 +5,8 @@ import './App.css'
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AdminLogin from "./component/AdminLogin.jsx";
+import Home from "./component/home"
+
 
 import { useSelector } from "react-redux";
 
@@ -16,7 +18,7 @@ const App = () => {
       <Routes>
         {/* Public route for the login page */}
         <Route path="/" element={<AdminLogin />} />
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </Router>
   );
