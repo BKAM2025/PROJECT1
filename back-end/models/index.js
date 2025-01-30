@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 console.log("hello")
-  // create a database connection in your application using a Sequelize instance and the config file
+// create a database connection in your application using a Sequelize instance and the config file
 const connection = new Sequelize(
   "e_commerce",
   "root",
@@ -12,7 +12,6 @@ const connection = new Sequelize(
 );
 
 
-
 //your user table using sequilize
 const user = connection.define("user", {
   name: {
@@ -22,6 +21,10 @@ const user = connection.define("user", {
   mail: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true
+    }
   },
   password: {
     type: DataTypes.STRING,
@@ -77,7 +80,7 @@ const product = connection.define("product", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  
+
   image: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -100,21 +103,12 @@ cart.belongsTo(product)
 
 // this call, Sequelize will automatically perform an SQL query to the database and create a table, printing the message car table created successfully!.
 // connection
-//   .sync({ force: true })
+//   .sync({ force: false })
 //   .then(() => {
 //     console.log("car table created successfully!");
 //   })
 //   .catch((error) => {
 //     console.error("Unable to create table : ", error);
 //   });
-// async function testconnection() {
-//   try {
-//     await connection.authenticate();
-//     console.log('Connection has been established successfully.');
-//   } catch (error) {
-//     console.error('Unable to connect to the database:', error);
-//   }
-// }
-// testconnection()
-// export your Model car below
+
 module.exports = { user, cart, category, admin, product };

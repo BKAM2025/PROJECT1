@@ -4,21 +4,18 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import AdminLogin from "./component/AdminLogin.jsx";
-import Home from "./component/home"
-
-
-import { useSelector } from "react-redux";
+import AdminLogins from "./component/AdminLogin.jsx";
+import AdminDashboard from "./component/AdminDashboard.jsx";
+import NavBar from "./component/NavBar.jsx";
 
 const App = () => {
-  const { token } = useSelector((state) => state.auth); // Access auth state from Redux
+  // Access auth state from Redux
 
   return (
     <Router>
       <Routes>
-        {/* Public route for the login page */}
-        <Route path="/" element={<AdminLogin />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<AdminLogins />} />
+        <Route path="/AdminDashboard" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );
