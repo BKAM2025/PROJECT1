@@ -1,16 +1,16 @@
 const express = require("express");
-const RouterProduct = express.Router();
-const { getAllUser,getAllProduct,addProduct,updateProduct,deleted } = require("../controllers/product.controller")
+const router = express.Router();
+const productController = require("../controllers/product.controller");
 
-RouterProduct.get("/:userId", getAllUser);
-RouterProduct.get("/", getAllProduct);
-RouterProduct.post("/", addProduct);
-RouterProduct.put("/:id", updateProduct);
-RouterProduct.delete("/:id", deleted);
+// ✅ Image upload route
+router.post("/upload-image", productController.uploadImage, productController.handleImageUpload);
 
+// ✅ Add product route (with image upload)
+router.post("/add", productController.uploadImage, productController.addProduct);
 
+// ✅ Delete product route
+router.delete("/delete-product/:id", productController.deleteProduct);
+// ✅ get product route
+router.get("/getAll", productController.AllProduct);
 
-
-
-
-module.exports = RouterProduct; 
+module.exports = router;

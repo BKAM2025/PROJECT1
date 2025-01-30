@@ -5,6 +5,8 @@ import './App.css'
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AdminLogin from "./component/AdminLogin.jsx";
+import Home from "./component/home"
+
 
 import { useSelector } from "react-redux";
 
@@ -15,13 +17,8 @@ const App = () => {
     <Router>
       <Routes>
         {/* Public route for the login page */}
-        <Route path="/login" element={<AdminLogin />} />
-
-        {/* Protected admin route */}
-       
-
-        {/* Redirect all unmatched routes to login */}
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/" element={<AdminLogin />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </Router>
   );

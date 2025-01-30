@@ -20,7 +20,7 @@ function CartList() {
   const addToCart = async (product) => {
     try {
       await axios.post('http://localhost:5000/api/cart/add', product);
-      fetchCartItems(); // Refresh the cart list
+      fetchCartItems(); 
     } catch (error) {
       console.error('Failed to add item to cart:', error);
     }

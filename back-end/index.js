@@ -6,7 +6,8 @@ console.log("hello");
 const RouterCart = require("./routers/cart.router")
 const userRoute = require("./routers/user.router")
 const RouterAdmin = require("./routers/admin.router")
-const RouterProduct=require("./routers/product.router")
+const RouterProduct = require("./routers/product.router")
+
 App.use(cors())
 App.use(express.json())
 App.use(express.urlencoded({ extended: true }));
