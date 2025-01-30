@@ -1,4 +1,4 @@
-const { product } = require("../models/index");
+const { product } = require("../models/index")
 const multer = require("multer");
 const path = require("path");
 
@@ -43,7 +43,7 @@ const handleImageUpload = (req, res) => {
 // ✅ Add Product Function
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, stock, userId,categoryId } = req.body;
+    const { name, price, description, stock, userId, categoryId } = req.body;
 
     // Ensure the image URL is properly handled
     const image = req.file ? `/uploads/${req.file.filename}` : null;
