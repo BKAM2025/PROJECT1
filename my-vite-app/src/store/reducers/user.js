@@ -1,4 +1,4 @@
-// src/store/authSlice.js
+// src/store/reducers/user.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -18,7 +18,6 @@ const authSlice = createSlice({
   name: 'user',
   initialState: {
     user: null,
-
     error: null,
   },
   reducers: {},
