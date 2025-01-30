@@ -50,8 +50,7 @@ const category = connection.define("category", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-
+  }
 })
 
 

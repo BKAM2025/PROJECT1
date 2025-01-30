@@ -15,7 +15,7 @@ export const login = (mail, password) => async (dispatch) => {
 };
 
 const initialState = {
-  admin: null,
+  user: null,
   token: null,
   isAuthenticated: false,
   loading: false,
@@ -32,6 +32,7 @@ const authSlice = createSlice({
     },
     loginSuccess: (state, action) => {
       state.user = action.payload.user;
+      state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
       state.loading = false;
@@ -42,6 +43,7 @@ const authSlice = createSlice({
       state.error = action.payload;
     },
     logout: (state) => {
+      state.user = null;
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;

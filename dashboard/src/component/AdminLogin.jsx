@@ -68,6 +68,8 @@ const AdminLogins = () => {
       </div>
     </div>
   );
-};
+}
+
+export default LoginUsers;
 
 export default AdminLogins;

@@ -9,6 +9,8 @@ export const login = (name, password) => async (dispatch) => {
     const response = await axios.post("http://localhost:5000/api/user/login", { name, password });
     const { user } = response.data;
 
+    const { user } = response.data;
+
 
     dispatch(loginSuccess({ user }));
     localStorage.setItem("token", response.data.user.token)
