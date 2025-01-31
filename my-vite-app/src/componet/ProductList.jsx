@@ -1,21 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ProductDetails from "./ProductDetails";
 import Navbar from './navBar';
 import { filterProduct, filterProductByQuery } from '../store/reducers/product.js';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '../ProductList.module.css';
-
+import  axios from 'axios';
 
 const ProductList = ({handleOneProduct}) => {
-  const dispatch = useDispatch();
+  const [favorites, setFavorites] = useState({});
 
+  const dispatch = useDispatch();
+console.log("start");
   // Get products, filteredProducts, loading, and error from Redux state
   const { products, filteredProducts, loading, error } = useSelector(state => state.product);
 
   useEffect(() => {
     console.log("start");
     dispatch(filterProduct()); // Dispatch the filterProduct action to fetch all products
+    fetchFavoriteStatus();
   }, [dispatch]);
+
+  const fetchFavoriteStatus = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/isFavorite/favorites`, {
+        headers: { authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      const favoritesMap = {};
+      response.data.forEach(product => {
+        favoritesMap[product.id] = true;
+      });
+      setFavorites(favoritesMap);
+    } catch (error) {
+      console.error('Failed to fetch favorites:', error);
+    }
+  };
 
   // Render loading state
   if (loading) {
@@ -26,6 +44,20 @@ const ProductList = ({handleOneProduct}) => {
   if (error) {
     return <p>Error: {error}</p>;
   }
+  const toggleFavorite = async (product) => {
+    try {
+      await axios.put(`http://localhost:5000/api/isFavorite/${product.id}`, {}, {
+        headers: { authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      // Toggle the favorite status locally
+      setFavorites(prev => ({
+        ...prev,
+        [product.id]: !prev[product.id]
+      }));
+    } catch (error) {
+      console.error('Failed to toggle favorite status:', error);
+    }
+  };
 
   // Handle keydown event for "Enter"
 
@@ -41,7 +73,7 @@ const ProductList = ({handleOneProduct}) => {
         <div className={styles['fl__header']}>
             <div className={styles['fl__title-group']}>
                 <span className={styles['fl__icon']}>📱</span>
-                <h2 className={styles['fl__subtitle']}>Today's</h2>
+                <h2 className={styles['fl__subtitle']}>Todays</h2>
                 <h1 className={styles['fl__main-title']}>Flash Sales</h1>
             </div>
             <div className={styles['fl__countdown']}>
@@ -58,7 +90,13 @@ const ProductList = ({handleOneProduct}) => {
                 <div key={product.id} className={styles['fl__product']}>
                     <span className={styles['fl__discount-tag']}>-{product.discount}%</span>
                     <div className={styles['fl__actions']}>
-                        <button className={styles['fl__action-btn']} onClick={()=>{}} >❤️</button>
+                    <button 
+                      className={`${styles['fl__action-btn']} ${favorites[product.id] ? styles['fl__favorite-active'] : ''}`} 
+                      onClick={() => toggleFavorite(product)}
+                    >
+                      {favorites[product.id] ? '❤️' : '🤍'}
+                    </button>
+                       
                         <button className={styles['fl__action-btn']} onClick={() => handleOneProduct(product)}>👁️</button>
                     </div>
                     <img 
