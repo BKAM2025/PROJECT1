@@ -8,7 +8,12 @@ import ProductList from './componet/ProductList.jsx';
 import OneProduct from './componet/OneProduct.jsx';
 import axios from 'axios';
 import AddProduct from './componet/addProduct.jsx';
+import Profile from './componet/Profile.jsx';
+import CartFull from './componet/Fullcart.jsx';
+import Favorites from './componet/favorite.jsx';
+import Footer from './componet/Footer.jsx';
 // import Home from "./componet/home.jsx"
+import ProductDetails from './componet/ProductDetails.jsx';
 import './App.css';
 
 function App() {
@@ -45,11 +50,15 @@ function App() {
             <Route path="/register" element={<SingUpUser />} />
             <Route path="/home" element={<ProductList  handleOneProduct={handleOneProduct} />} />
             <Route path="/product/:id" element={<OneProduct product={selectedProduct} />} />
-            <Route path="/register" element={<SingUpUser />} />
-            <Route path="/addProduct" element={< AddProduct />} />
+            <Route path="/productDetails/:id" element={<ProductDetails product={selectedProduct} />} />
+            <Route path="/addProduct" element={< AddProduct fetch={fetchProduct} />} />
+            <Route path="/cart" element={< CartFull />} />
+            <Route path="/favorites" element={< Favorites/>} />
+            <Route path="/profile" element={< Profile />} />
           </Routes>
         </Router>
       </Provider>
+      <Footer />
     </div>
   );
 }
