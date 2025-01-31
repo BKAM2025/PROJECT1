@@ -54,7 +54,10 @@ const cart = connection.define("cart", {
 });
 
 const isFavorite = connection.define("isFavorite", {
-
+  isFavorite: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
 })
 
 
@@ -105,4 +108,4 @@ product.belongsToMany(user, { through: isFavorite, as: 'FavoritedByUsers', forei
 //     console.error("Unable to create table : ", error);
 //   });
 
-module.exports = { user, cart, category, product };
+module.exports = { user, cart, category, product,isFavorite };
