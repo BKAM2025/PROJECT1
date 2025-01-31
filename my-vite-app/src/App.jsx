@@ -9,9 +9,10 @@ import OneProduct from './componet/OneProduct.jsx';
 import axios from 'axios';
 import AddProduct from './componet/addProduct.jsx';
 import Profile from './componet/Profile.jsx';
-import CartFull from './componet/Fullcart.jsx';
+import CartFull from './componet/cart.jsx';
 import Favorites from './componet/favorite.jsx';
 import Footer from './componet/Footer.jsx';
+import Payment from './componet/Payment.jsx';
 // import Home from "./componet/home.jsx"
 import ProductDetails from './componet/ProductDetails.jsx';
 import './App.css';
@@ -19,7 +20,10 @@ import './App.css';
 function App() {
   const [product, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-
+  const [cart, setCart] = useState([]);
+  const handleCheckout = () => {
+    console.log("Checkout");
+  }
 
   const fetchProduct = async () => {
     try {
@@ -55,6 +59,7 @@ function App() {
             <Route path="/cart" element={< CartFull />} />
             <Route path="/favorites" element={< Favorites/>} />
             <Route path="/profile" element={< Profile />} />
+            <Route path="/payment" element={< Payment />} />
           </Routes>
         </Router>
       </Provider>
