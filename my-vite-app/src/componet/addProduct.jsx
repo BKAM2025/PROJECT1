@@ -1,7 +1,7 @@
 import React, { useState ,useEffect} from "react";
 import axios from "axios";
 import { FilePlus } from "lucide-react";
-import { jwtDecode } from "jwt-decode";
+// import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 import "../AddProduct.css";
 

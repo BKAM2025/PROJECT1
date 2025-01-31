@@ -8,6 +8,7 @@ const RouterCart = require("./routers/cart.router")
 const userRoute = require("./routers/user.router")
 const RouterAdmin = require("./routers/admin.router")
 const RouterProduct = require("./routers/product.router")
+// const RouterCart= require('./routers/cart.router')
 
 App.use(cors())
 App.use(express.json())

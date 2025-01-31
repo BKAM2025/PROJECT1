@@ -12,6 +12,7 @@ import Profile from './componet/Profile.jsx';
 import CartFull from './componet/Fullcart.jsx';
 import Favorites from './componet/favorite.jsx';
 import Footer from './componet/Footer.jsx';
+
 // import Home from "./componet/home.jsx"
 import ProductDetails from './componet/ProductDetails.jsx';
 import './App.css';
