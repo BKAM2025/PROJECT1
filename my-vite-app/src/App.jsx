@@ -20,10 +20,7 @@ import './App.css';
 function App() {
   const [product, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [cart, setCart] = useState([]);
-  const handleCheckout = () => {
-    console.log("Checkout");
-  }
+
 
   const fetchProduct = async () => {
     try {

@@ -4,11 +4,12 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
 import Swal from "sweetalert2";
-import "./Payment.css";
+
 
 const stripePromise = loadStripe("pk_test_51QnFpLKbF047pIERqqM4AE8tkMoemAYpXJfPAsp45AEo3zEi9tmC7P6QzVDlX7VLWztNbm9UoHkwgv9akW3UNWE700b4qdbZR9");
 
 const PaymentForm = ({ amount }) => {
+  amount=123
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
@@ -19,57 +20,50 @@ const PaymentForm = ({ amount }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true); // Set loading to true
-    if (paymentMethod === "card") {
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: "card",
-        card: elements.getElement(CardElement),
-        billing_details: {
-        },
-      });
+    setLoading(true);
+    setError(null); // Reset error state
 
-      if (error) {
+    if (paymentMethod === "card") {
+      try {
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+          type: "card",
+          card: elements.getElement(CardElement),
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        // Convert amount to cents for Stripe
+        const amountInCents = Math.round(amount * 100);
+        
+        const response = await axios.post("http://localhost:5000/api/Payment/payment", {
+          amount: amountInCents,
+          id: paymentMethod.id,
+        });
+
+        
+        if (response.data.success) {
+          setSuccess(true);
+          Swal.fire({
+            icon: 'success',
+            title: 'Payment Successful',
+            text: 'Thank you for your purchase!',
+          }).then(() => {
+            navigate("/payment-success");
+          });
+        } else {
+          throw new Error(response.data.message || "Payment failed");
+        }
+      } catch (error) {
         setError(error.message);
-        setLoading(false); // Set loading to false
         Swal.fire({
           icon: 'error',
           title: 'Payment Failed',
-          text: error.message,
+          text: error.message || 'Payment failed. Please try again.',
         });
-      } else {
-        const { id } = paymentMethod;
-        try {
-          const response = await axios.post("http://localhost:5000/api/Payment/payment", {
-            amount,
-            id,
-          });
-          if (response.data.success) {
-            setLoading(false); // Set loading to false
-            Swal.fire({
-              icon: 'success',
-              title: 'Payment Successful',
-              text: 'Thank you for your purchase!',
-            }).then(() => {
-              navigate("/payment-success"); // Redirect to success page
-            });
-          } else {
-            setError("Payment failed");
-            setLoading(false); // Set loading to false
-            Swal.fire({
-              icon: 'error',
-              title: 'Payment Failed',
-              text: 'Payment failed. Please try again.',
-            });
-          }
-        } catch (error) {
-          setError("Payment failed");
-          setLoading(false); // Set loading to false
-          Swal.fire({
-            icon: 'error',
-            title: 'Payment Failed',
-            text: 'Payment failed. Please try again.',
-          });
-        }
+      } finally {
+        setLoading(false);
       }
     }
   };

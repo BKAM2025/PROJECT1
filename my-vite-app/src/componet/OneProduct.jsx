@@ -1,17 +1,62 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { FaHeart } from 'react-icons/fa'; 
+import axios from 'axios';
+import { jwtDecode } from "jwt-decode"
+import { use } from "react";
+// import { head } from "../../../back-end/routers/product.router";
+
+// import getUserIdFromToken from "../middlwares/getIdFromToken";
 
 const OneProduct = ({ product }) => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(product.isFavorite)
+  const [cartItems, setCartItems] = useState([]);
+  
+  console.log(cartItems, "cartItems") ;
+
+
+  useEffect(() => {
+    fetchCartItems();
+    getUserIdFromToken()
+  }, []);
+
 
   if (!product) {
     return <p>Product not found</p>;
   }
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
+  const toggleFavorite = async () => {
+    try {
+      await axios.put(`http://localhost:5000/api/product/${product.id}/favorite`,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}, {
+       
+        productId: product.id
+      });
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.error('Failed to toggle favorite status:', error);
+    }
+  };
+
+  const fetchCartItems = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/cart/get`);
+      setCartItems(response.data);
+    } catch (error) {
+      console.error('Failed to fetch cart items:', error);
+    }
+  };
+
+  const addToCart = async (productId) => {
+    try {
+      await axios.post('http://localhost:5000/api/cart/add', {
+        userId: currentId,    
+        productId: productId,
+      });
+      alert('Product added to cart');
+    } catch (error) {
+      console.error('Failed to add item to cart:', error);
+    }
   };
 
   
@@ -53,7 +98,6 @@ const OneProduct = ({ product }) => {
 
           <p className="product-description">{product.description}</p>
           <p className={`product-stock ${product.stock > 0 ? "in-stock" : "out-of-stock"}`}>
-            {product.stock > 0 ? `In Stock: ${product.stock}` : "Out of Stock"}
           </p>
 
           <div className="favorite-btn">
@@ -68,7 +112,7 @@ const OneProduct = ({ product }) => {
           </div>
 
           <div className="action-buttons">
-            <button className="add-to-cart-btn">Add to Cart</button>
+            <button className="add-to-cart-btn" onClick={()=>(addToCart(product.id))}  >Add to Cart</button>
             <button className="buy-now-btn">Buy Now</button>
           </div>
         </div>

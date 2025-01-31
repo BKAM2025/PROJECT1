@@ -25,7 +25,11 @@ const handleImageUpload = async (req, res) => {
 // Add Product Function
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, stock, userId, categoryId, image } = req.body;
+    if(!req.user.role === "user"){
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { name, price, description, stock, categoryId, image } = req.body;
 
     // Create product entry in database
     const newProduct = await product.create({
@@ -34,7 +38,7 @@ const addProduct = async (req, res) => {
       description,
       stock: parseInt(stock),
       image,
-      userId,
+      userId: req.user.id,
       categoryId,
     });
 

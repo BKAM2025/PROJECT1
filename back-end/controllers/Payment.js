@@ -1,19 +1,32 @@
 const stripe = require("stripe")("sk_test_51QnFpLKbF047pIER0qmlmTtx0137dSFlKim8ZpjGYKQfbMlBF01GvNZPImS9EQWRZmox5qfQRhp9Prk7s8uY5FdU00FAhqbl0R");
-
 const handlePayment = async (req, res) => {
   const { amount, id } = req.body;
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
+    const payment = await stripe.paymentIntents.create({
       amount,
       currency: "usd",
       description: "Your Company Description",
       payment_method: id,
       confirm: true,
-      return_url: "http://localhost:3000/payment-success", // Replace with your actual return URL
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: 'never'
+      }
     });
-    res.json({ success: true, message: "Payment successful", paymentIntent });
+
+    res.json({
+      success: true,
+      message: "Payment successful",
+      payment: {
+        id: payment.id,
+        status: payment.status
+      }
+    });
   } catch (error) {
-    res.json({ success: false, message: "Payment failed", error });
+    res.status(400).json({
+      success: false,
+      message: error.message || "Payment failed",
+    });
   }
 };
 

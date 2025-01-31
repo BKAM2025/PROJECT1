@@ -2,11 +2,20 @@ import React, { useState } from 'react';
 import styles from '../Cart.module.css';
 import { Trash2, Heart } from 'lucide-react'; // Assuming you're using lucide-react for icons
 
-const Cart = ({handleCheckout}) => {
+const Cart = () => {
+  const [cart, setCart] = useState([]);
+  const [amount, setAmount] = useState(0);
+
   const [quantities, setQuantities] = useState({
     'LCD Monitor': 1,
     'Game Controller': 2
   });
+  
+  const handleCheckout = (m) => {
+    setAmount(m);
+    console.log("Checkout");
+  }
+ 
 
   const prices = {
     'LCD Monitor': 650,
@@ -115,7 +124,7 @@ const Cart = ({handleCheckout}) => {
             </div>
           </div>
 
-          <button className={styles.cart__checkoutBtn} onClick={()=>handleCheckout(amount)}>
+          <button className={styles.cart__checkoutBtn} onClick={()=>handleCheckout(123)}>
             Proceed to Checkout
           </button>
 

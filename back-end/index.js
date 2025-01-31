@@ -11,6 +11,7 @@ const RouterAdmin = require("./routers/admin.router")
 const RouterProduct = require("./routers/product.router")
 const RouterPayment = require("./routers/Payment")
 
+const RouterIsFavorite = require("./routers/isFavorite.router")
 
 App.use(cors())
 App.use(express.json())
@@ -22,6 +23,8 @@ App.use("/api/product", productRoute)
 
 App.use("/api/cart", RouterCart)
 App.use("/api/product", RouterProduct)
+App.use("/api/isFavorite", RouterIsFavorite)
+
 App.use("/api/Payment", RouterPayment)
 
 App.listen(port, () => {
