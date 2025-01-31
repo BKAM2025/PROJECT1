@@ -1,28 +1,33 @@
-const {user}=require("../models/index")
-const bcrypt=require("bcrypt")
-const jwt=require("jsonwebtoken")
+const { user } = require("../models/index")
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+
+// Middleware to handle refresh tokens
+const refreshTokenMiddleware = (req, res, next) => {
+  const refreshToken = req.body.token;
+  if (!refreshToken) return res.status(403).send({ message: "Refresh token is required" });
+
+  jwt.verify(refreshToken, "124578", (err, user) => {
+    if (err) return res.status(403).send({ message: "Invalid refresh token" });
+
+    req.user = user;
+    next();
+  });
+};
 
 module.exports = {
   register: async (req, resp) => {
     try {
-      const { name, mail, password ,role} = req.body;
-
+      const { name, mail, password, role } = req.body;
 
       const check = await user.findOne({ where: { mail } });
       if (check) {
-
         return resp.status(409).send("Email already exists");
       }
 
       const hashedPassword = await bcrypt.hash(password, 15);
 
-<<<<<<< HEAD
-
-      const newUser = await user.create({ name: name, mail: mail, password: hashedPassword });
-=======
-     
-      const newUser = await user.create({ name: name, mail: mail, password: hashedPassword ,role:role});
->>>>>>> 0b9ac64c06da9b7e49ac65cb4cc1811de7adccbf
+      const newUser = await user.create({ name, mail, password: hashedPassword, role });
 
       // Respond with the created user object
       return resp.status(201).send(newUser);
@@ -31,8 +36,7 @@ module.exports = {
       // Sending error response with 500 status code for server errors
       return resp.status(500).json({ message: "Error during registration", error });
     }
-  }
-  ,
+  },
   login: async (req, res) => {
     const { mail, password } = req.body;
 
@@ -43,67 +47,60 @@ module.exports = {
         return res.status(404).send({ message: "User not found" });
       }
       const isMatch = await bcrypt.compare(password, userr.password);
-<<<<<<< HEAD
-      if (isMatch) {
-        return res.status(200).json({
-          message: "Login successful",
-          user: {
-            id: userr.id,
-            mail: userr.mail,
-            token: jwt.sign({ id: userr.id }, "1234", { expiresIn: "24h" })
-          },
-        });
-      } else {
+      if (!isMatch) {
         return res.status(401).send({ message: "Incorrect password" });
       }
-=======
 
-
+      const accessToken = jwt.sign({ id: userr.id, role: userr.role }, "124578", { expiresIn: "15m" });
+      const refreshToken = jwt.sign({ id: userr.id, role: userr.role }, "124578");
 
       res.status(200).json({
         message: "Login successful",
         user: {
           id: userr.id,
           mail: userr.mail,
-          token: jwt.sign({ id: userr.id ,role:userr.role}, "1234", { expiresIn: "24h" })
+          accessToken,
+          refreshToken
         },
       });
 
->>>>>>> 0b9ac64c06da9b7e49ac65cb4cc1811de7adccbf
     } catch (error) {
       console.error(error);
       res.status(500).send({ message: "An error occurred", error });
     }
   },
-
+  refreshToken: (req, res) => {
+    const { id, role } = req.user;
+    const newAccessToken = jwt.sign({ id, role }, "accessSecretKey", { expiresIn: "15m" });
+    res.status(200).json({ accessToken: newAccessToken });
+  },
   deleted: (req, res) => {
     user.destroy({
       where: {
-        id:req.params.id
-      }})
+        id: req.params.id
+      }
+    })
       .then(() => {
-        res.status(200).json({message:"delete user"});  
+        res.status(200).json({ message: "User deleted" });
       })
       .catch((error) => {
-        res.status(500).json({ message: 'error to delete user', error });  
+        res.status(500).json({ message: 'Error deleting user', error });
       });
   },
-<<<<<<< HEAD
-=======
-  getUserIdFromToken : async(req, res) => {
-   try {
-    console.log(req.user)
-    const currentuser=await user.findOne({where:{id:req.user.id}})
-    res.status(200).send(currentuser)
-    res.send("👌👌")
-    
-   } catch (error) {
-     console.error('Failed to decode token:', error);
-     
-    
-   }
-   
-    },
+  getUserIdFromToken: async (req, res) => {
+    try {
+      console.log(req.user)
+      const currentuser = await user.findOne({ where: { id: req.user.id } })
+      res.status(200).send(currentuser)
+      res.send("👌👌")
+
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+
+
+    }
+
+  },
 
   findAllUsers: (req, res) => {
     try {
@@ -113,7 +110,8 @@ module.exports = {
       res.status(400).send({ "message:": err })
     }
   }
->>>>>>> 0b9ac64c06da9b7e49ac65cb4cc1811de7adccbf
 };
+
+module.exports.refreshTokenMiddleware = refreshTokenMiddleware;
 
 

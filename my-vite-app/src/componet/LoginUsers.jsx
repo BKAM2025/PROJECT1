@@ -16,20 +16,9 @@ function LoginUsers() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("")
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-<<<<<<< HEAD
-    dispatch(login(mail, password))
-      .then(() => {
-        if (!isAuthenticated) {
-          setError("Authentication failed. Please check your credentials.");
-        }
-      })
-      .catch(err => {
-        setError("An error occurred during login. Please try again.");
-      });
-=======
-    await dispatch(login(mail, password));
+    dispatch(login(mail, password));
     try {
       console.log({ mail, password });
 
@@ -41,7 +30,6 @@ function LoginUsers() {
     catch (error) {
       throw error
     }
->>>>>>> 0b9ac64c06da9b7e49ac65cb4cc1811de7adccbf
   };
 
   useEffect(() => {

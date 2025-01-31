@@ -8,6 +8,7 @@ const SignUpUser = () => {
   const [name, setName] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('client'); // Default role
   const [errorMessage, setErrorMessage] = useState(null);
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.user);
@@ -16,7 +17,7 @@ const SignUpUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(registerUser({name, mail, password}));
+      await dispatch(registerUser({ name, mail, password, role }));
       navigate("/");
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "An unexpected error occurred.");
@@ -26,13 +27,13 @@ const SignUpUser = () => {
   return (
     <div className={styles.signup__container}>
       <div className={styles.signup__imageSection}>
-        <img 
-          src="/path-to-your-shopping-image.jpg" 
-          alt="Shopping Cart with Phone" 
+        <img
+          src="/path-to-your-shopping-image.jpg"
+          alt="Shopping Cart with Phone"
           className={styles.signup__image}
         />
       </div>
-      
+
       <div className={styles.signup__formSection}>
         <div className={styles.signup__formWrapper}>
           <h1 className={styles.signup__title}>Create an account</h1>
@@ -72,25 +73,55 @@ const SignUpUser = () => {
               />
             </div>
 
-            <button 
-              type="submit" 
+            <div className={styles.signup__inputGroup}>
+              <label>
+                <input
+                  type="radio"
+                  value="client"
+                  checked={role === 'client'}
+                  onChange={(e) => setRole(e.target.value)}
+                />
+                Client
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="seller"
+                  checked={role === 'seller'}
+                  onChange={(e) => setRole(e.target.value)}
+                />
+                Seller
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="admin"
+                  checked={role === 'admin'}
+                  onChange={(e) => setRole(e.target.value)}
+                />
+                Admin
+              </label>
+            </div>
+
+            <button
+              type="submit"
               className={styles.signup__button}
               disabled={status === 'loading'}
             >
               {status === 'loading' ? 'Creating Account...' : 'Create Account'}
             </button>
 
-            <button 
-              type="button" 
+            <button
+              type="button"
               className={styles.signup__googleButton}
-              onClick={() => {/* Handle Google Sign up */}}
+              onClick={() => {/* Handle Google Sign up */ }}
             >
               <img src="/google-icon.png" alt="Google" className={styles.signup__googleIcon} />
               Sign up with Google
             </button>
 
             <div className={styles.signup__login}>
-              Already have an account? 
+              Already have an account?
               <a href="/" className={styles.signup__loginLink}>Log in</a>
             </div>
           </form>

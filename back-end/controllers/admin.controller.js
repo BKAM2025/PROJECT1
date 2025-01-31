@@ -1,4 +1,4 @@
-const { admin, product, user, category } = require("../models/index")
+const { product, user, category } = require("../models/index")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const { where } = require("sequelize");
@@ -7,7 +7,7 @@ module.exports = {
   register: async (req, resp) => {
     try {
       const { name, mail, password } = req.body
-      const check = await admin.findOne({ where: { mail } })
+      const check = await user.findOne({ where: { mail } })
       if (check) {
         return resp.status(404).send("mail existed")
       }
@@ -24,7 +24,7 @@ module.exports = {
   login: async (req, res) => {
     try {
       const { mail, password } = req.body;
-      const admi = await admin.findOne({ where: { mail } });
+      const admi = await user.findOne({ where: { mail } });
       if (!admi) {
         return res
           .status(404)

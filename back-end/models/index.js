@@ -30,7 +30,7 @@ const user = connection.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  role: { 
+  role: {
     type: DataTypes.ENUM("user", "seller", "admin"),
     defaultValue: "user",
   }
@@ -50,7 +50,7 @@ const category = connection.define("category", {
 
 
 const cart = connection.define("cart", {
- 
+
 });
 
 const isFavorite = connection.define("isFavorite", {
