@@ -4,13 +4,13 @@ import { filterProductByQuery } from '../store/reducers/product.js';
 
 const Navbar = () => {
   const dispatch = useDispatch();
-  const [query, setQuery] = useState("");  // State to hold the search query
+  const [query, setQuery] = useState("");  
 
-  // Handle search query change and prevent form submission on Enter
+ 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      e.preventDefault(); // Prevent form submission (page refresh)
-      dispatch(filterProductByQuery(query));  // Dispatch the filterProductByQuery action
+      e.preventDefault(); 
+      dispatch(filterProductByQuery(query));  
     }
   };
 
@@ -28,15 +28,15 @@ const Navbar = () => {
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}  // Update query state
-            onKeyDown={handleKeyDown}  // Prevent form submission and handle "Enter"
+            onChange={(e) => setQuery(e.target.value)}  
+            onKeyDown={handleKeyDown} 
             placeholder="Search products..."
           />
         </form>
 
         <a href="/addProduct" className="add-product-btn">Add Product</a>
 
-        <a href="/favorites"><Heart size={22} className="icon" /></a>
+        {/* <a href="/favorites"><Heart size={22} className="icon" /></a> */}
         <a href="/cart"><ShoppingCart size={22} className="icon" onClick={()=>{navigate("/cart")}}/></a>
         <a href="/profile"><User size={22} className="icon" /></a>
 
