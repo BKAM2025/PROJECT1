@@ -58,7 +58,7 @@ const ProductList = ({handleOneProduct}) => {
                 <div key={product.id} className={styles['fl__product']}>
                     <span className={styles['fl__discount-tag']}>-{product.discount}%</span>
                     <div className={styles['fl__actions']}>
-                        <button className={styles['fl__action-btn']} >❤️</button>
+                        <button className={styles['fl__action-btn']} onClick={()=>{}} >❤️</button>
                         <button className={styles['fl__action-btn']} onClick={() => handleOneProduct(product)}>👁️</button>
                     </div>
                     <img 
