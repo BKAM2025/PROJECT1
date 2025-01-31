@@ -4,7 +4,7 @@ console.log("hello")
 const connection = new Sequelize(
   "e_commerce",
   "root",
-  "120612061206",
+  "root",
   {
     host: "localhost",
     dialect: "mysql",
@@ -103,7 +103,7 @@ cart.belongsTo(product)
 
 // this call, Sequelize will automatically perform an SQL query to the database and create a table, printing the message car table created successfully!.
 // connection
-//   .sync({ force: false })
+//   .sync({ force: true })
 //   .then(() => {
 //     console.log("car table created successfully!");
 //   })

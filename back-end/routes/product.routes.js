@@ -12,5 +12,7 @@ router.post('/upload-image', upload.single('file'), productController.handleImag
 // Route to add a new product
 router.post('/add', productController.addProduct);
 
+
+
 // Export the router
 module.exports = router; 

@@ -1,6 +1,7 @@
 const { admin, product, user } = require("../models/index")
 const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { where } = require("sequelize");
 console.log("hello")
 module.exports = {
   register: async (req, resp) => {
@@ -49,11 +50,66 @@ module.exports = {
   // },
   getALLusers: async (req, res) => {
     try {
-      const allusers = user.findAll({ where: { userId: null } })
+      const allusers = await user.findAll()
+      console.log("hello users:", allusers)
       res.status(200).send({ "this is your app users:": allusers })
     } catch (err) {
       console.log("err", err)
       res.status(400).send({ "message": err })
+    }
+  },
+  getSellers: async (req, res) => {
+    try {
+      const allusers = await user.findAll();
+
+      // Use Promise.all to handle asynchronous filtering
+      const result = await Promise.all(
+        allusers.map(async (usery) => {
+          const productofOne = await product.findAll({ where: { userId: usery.id } });
+          return productofOne.length > 0 ? usery : null;
+        })
+      );
+
+      // Filter out null values (users without products)
+      const filteredUsers = result.filter(usery => usery !== null);
+
+      res.status(200).send(filteredUsers);
+    } catch (err) {
+      console.log("err", err);
+      res.status(400).send({ "message": err });
+    }
+  },
+  getBuyer: async (req, res) => {
+    try {
+      const allUsers = await user.findAll();
+
+      // Use Promise.all to handle asynchronous operations
+      const result = await Promise.all(
+        allUsers.map(async (usery) => {
+          const productsOfUser = await product.findAll({ where: { userId: usery.id } });
+          return productsOfUser.length === 0 ? usery : null; // Return user if no products
+        })
+      );
+
+      // Filter out null values (users with products)
+      const filteredUsers = result.filter(usery => usery !== null);
+
+      res.status(200).send(filteredUsers);
+    } catch (err) {
+      console.log("err", err);
+      res.status(400).send({ "message": err });
+    }
+  }
+
+  ,
+  ProductOfOne: async (req, res) => {
+    const { id } = req.params
+    try {
+      const result = await product.findAll({ where: { userId: id } })
+      res.status(200).send(result)
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
     }
   }
 };

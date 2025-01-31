@@ -7,16 +7,16 @@ module.exports = {
     try {
       const { name, mail, password } = req.body;
 
-      
+
       const check = await user.findOne({ where: { mail } });
       if (check) {
-        
+
         return resp.status(409).send("Email already exists");
       }
 
       const hashedPassword = await bcrypt.hash(password, 15);
 
-     
+
       const newUser = await user.create({ name: name, mail: mail, password: hashedPassword });
 
       // Respond with the created user object
@@ -77,15 +77,6 @@ module.exports = {
         res.status(500).json({ message: 'error to delete user', error });
       });
   },
-
-  findAllUsers: (req, res) => {
-    try {
-      const users = user.findAll()
-    } catch (err) {
-      console.log("err", err)
-      res.status(400).send({ "message:": err })
-    }
-  }
 };
 
 
