@@ -80,7 +80,46 @@ module.exports = {
       console.log("err", err)
       res.status(400).send({ "message:": err })
     }
+  },
+
+  
+
+   updateUser : async (req, res) => {
+    const { id } = req.params; // The 'id' is provided in the URL (not 'name')
+    const { mail, password } = req.body; // These come from the request body
+    
+    try {
+      // Find user by id
+      const user = await User.findOne({ where: { id } });
+  
+      // If the user is not found, return a 404 error
+      if (!user) {
+        return res.status(404).send({ message: "User not found" });
+      }
+  
+      // Prepare the updated data
+      const updatedData = {
+        mail: mail || user.mail, // You only update the fields that are provided
+        password: password || user.password,
+      };
+  
+      // Update the user in the database
+      const [updatedRows] = await User.update(updatedData, {
+        where: { id }, // Find the user by ID
+      });
+  
+      if (updatedRows === 0) {
+        return res.status(500).send({ message: "Failed to update user" });
+      }
+  
+      // Respond with a success message
+      res.send({ message: "User successfully updated", updatedData });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({ message: "Internal server error" });
+    }
   }
-};
+  
+}  
 
 

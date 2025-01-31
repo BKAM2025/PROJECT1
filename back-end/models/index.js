@@ -4,7 +4,7 @@ console.log("hello")
 const connection = new Sequelize(
   "e_commerce",
   "root",
-  "root",
+  "120612061206",
   {
     host: "localhost",
     dialect: "mysql",
@@ -17,6 +17,7 @@ const user = connection.define("user", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
   mail: {
     type: DataTypes.STRING,

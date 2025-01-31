@@ -12,11 +12,17 @@ export const login = (mail, password) => async (dispatch) => {
 
     dispatch(loginSuccess({ user }));
     localStorage.setItem("token", response.data.user.token)
-  } catch (error) {
-
-    dispatch(loginFailure(error.response?.data?.message || error.message));
-  }
-};
+    navigate("/home")
+    if (response.data && response.data.error) {
+      setError("Account not found or incorrect password");
+      return; }
+}
+catch (error) {
+  // Handle errors like network failure or server issues
+  setError("An error occurred. Please try again later.");
+  
+}
+}
 
 
 const initialState = {
