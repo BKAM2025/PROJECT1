@@ -3,52 +3,39 @@ import { FaHeart } from 'react-icons/fa';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode"
 import { use } from "react";
+// import { head } from "../../../back-end/routers/product.router";
 
 // import getUserIdFromToken from "../middlwares/getIdFromToken";
 
 const OneProduct = ({ product }) => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(product.isFavorite)
   const [cartItems, setCartItems] = useState([]);
-  const [currentId, setCurrent] = useState(null);
+  
   console.log(cartItems, "cartItems") ;
 
-  const getUserIdFromToken = async() => {
-    
-    try {
-      const token = await localStorage.getItem('token')
-      console.log( "token👌👌",token);
-      
-      if (!token) return null;
-      const {id} =await jwtDecode(token);
-      setCurrent(id)
-    console.log( "my id👌👌",id);
-
- 
-    } catch (error) {
-      console.error('Failed to decode token:', error);
-      return null;
-    }
-  };
-
-  
-
-  
-  
 
   useEffect(() => {
     fetchCartItems();
     getUserIdFromToken()
   }, []);
 
-  console.log("❤️❤️❤️",currentId)
+
   if (!product) {
     return <p>Product not found</p>;
   }
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
+  const toggleFavorite = async () => {
+    try {
+      await axios.put(`http://localhost:5000/api/product/${product.id}/favorite`,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}, {
+       
+        productId: product.id
+      });
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.error('Failed to toggle favorite status:', error);
+    }
   };
 
   const fetchCartItems = async () => {

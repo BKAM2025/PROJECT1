@@ -1,39 +1,48 @@
-import React, { useState } from "react";
-import axios from "axios"; 
-import { FilePlus } from "lucide-react"; 
-import "../AddProduct.css"
-const AddProduct = ({ className = "", user=1 }) => {
+import React, { useState ,useEffect} from "react";
+import axios from "axios";
+import { FilePlus } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
+import "../AddProduct.css";
+
+const AddProduct = ({ className = "" ,fetch}) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+
   const [product, setProduct] = useState({
     name: "",
     price: "",
     description: "",
-    image: "",  
+    image: "",
     stock: "",
+ 
   });
-  const [loading, setLoading] = useState(false);  
+  
+
+  
+
+
 
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
   };
 
-  
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
-      
-   
-      try {
-        const response = await axios.post("http://localhost:5000/api/product/upload-image", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",   
-          },
-        });
+      formData.append("upload_preset", "pxih5cle");
+      formData.append("cloud_name", "dsbt68v5je");
 
-        if (response.data.imageUrl) {
-          setProduct({ ...product, image: response.data.imageUrl });  
-          setProduct({ ...product, image: response.data.imageUrl }); 
+      try {
+        const response = await axios.post(
+          "https://api.cloudinary.com/v1_1/dsbt68v5j/image/upload",
+          formData
+        );
+
+        if (response.data.secure_url) {
+          setProduct({ ...product, image: response.data.secure_url });
         }
       } catch (error) {
         console.error("Error uploading image:", error);
@@ -45,27 +54,15 @@ const AddProduct = ({ className = "", user=1 }) => {
     e.preventDefault();
     setLoading(true);
 
-    if (!user) {
-      alert("You must be logged in to add a product.");
-      setLoading(false);
-      return;
-    }
-
     try {
-    
- 
-      const response = await axios.post("http://localhost:5000/api/product/add", {
-        ...product,categoryId:1,
-        userId: user.id,  
-      },);
-
+      const response = await axios.post("http://localhost:5000/api/product/add", product,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
       if (response.status === 200) {
-        console.log("Product added successfully:", response.data);
         alert("Product added successfully!");
       } else {
-        console.error("Error adding product:", response.statusText);
         alert("Error adding product");
       }
+      fetch();
+      navigate('/home');
     } catch (error) {
       console.error("Network error:", error);
       alert("Network error. Please try again.");
@@ -81,8 +78,6 @@ const AddProduct = ({ className = "", user=1 }) => {
         Add a New Product
       </h2>
       <form onSubmit={handleSubmit} className="form-container">
-        
-        {/* Name Input */}
         <div className="mb-3">
           <label htmlFor="name" className="form-label">Product Name</label>
           <input 
@@ -95,7 +90,6 @@ const AddProduct = ({ className = "", user=1 }) => {
           />
         </div>
 
-     
         <div className="mb-3">
           <label htmlFor="price" className="form-label">Price ($)</label>
           <input 
@@ -109,7 +103,6 @@ const AddProduct = ({ className = "", user=1 }) => {
           />
         </div>
 
-      
         <div className="mb-3">
           <label htmlFor="description" className="form-label">Description</label>
           <textarea 
@@ -121,7 +114,6 @@ const AddProduct = ({ className = "", user=1 }) => {
           ></textarea>
         </div>
 
-        
         <div className="mb-3">
           <label htmlFor="image" className="form-label">Image</label>
           <input 
@@ -135,7 +127,6 @@ const AddProduct = ({ className = "", user=1 }) => {
           {product.image && <img src={product.image} alt="Product Preview" className="mt-3 img-fluid" />}
         </div>
 
-     
         <div className="mb-3">
           <label htmlFor="stock" className="form-label">Stock Quantity</label>
           <input 
@@ -148,7 +139,6 @@ const AddProduct = ({ className = "", user=1 }) => {
           />
         </div>
 
-      
         <button 
           type="submit" 
           className="btn btn-primary w-100"

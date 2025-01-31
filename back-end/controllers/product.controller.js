@@ -1,84 +1,51 @@
-const { product } = require("../models/index")
-const multer = require("multer");
-const path = require("path");
+const { product } = require("../models/index");
+const cloudinary = require("cloudinary").v2;
 
-// ✅ Set up multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Directory to store images
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname); // Extract file extension
-    const filename = `${Date.now()}-${file.originalname}`;
-    cb(null, filename); // Save file with a unique name
-  },
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: "dsbt68v5j",
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// ✅ File filter to allow only images
-const fileFilter = (req, file, cb) => {
-  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error("Invalid file type. Only JPEG, PNG, and GIF are allowed."), false);
+// Handle image upload to Cloudinary
+const handleImageUpload = async (req, res) => {
+  try {
+    const file = req.file.path;
+    const result = await cloudinary.uploader.upload(file, {
+      folder: "products",
+    });
+    return res.status(200).json({ imageUrl: result.secure_url });
+  } catch (error) {
+    console.error("Error uploading image to Cloudinary:", error);
+    return res.status(500).json({ message: "Error uploading image", error });
   }
 };
 
-// ✅ Initialize multer middleware✅
-const upload = multer({ storage, fileFilter });
-
-// ✅ Middleware for handling image uploads✅
-const uploadImage = upload.single("file");
-
-// ✅ Handle image upload response✅
-const handleImageUpload = (req, res) => {
-  if (req.file) {
-    const imageUrl = `/uploads/${req.file.filename}`;
-    return res.status(200).json({ imageUrl });
-  } else {
-    return res.status(400).json({ message: "No image uploaded" });
-  }
-};
-
-// ✅ Add Product Function
+// Add Product Function
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, stock, userId, categoryId } = req.body;
+    if(!req.user.role === "user"){
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
-    // Ensure the image URL is properly handled
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
+    const { name, price, description, stock, categoryId, image } = req.body;
 
     // Create product entry in database
     const newProduct = await product.create({
       name,
-      price: parseFloat(price), // Ensure price is stored as a float
+      price: parseFloat(price),
       description,
-      stock: parseInt(stock), // Ensure stock is stored as an integer
+      stock: parseInt(stock),
       image,
-      userId,
-      categoryId
+      userId: req.user.id,
+      categoryId,
     });
 
-    return res.status(201).send({ message: "Product added successfully", newProduct });
+    return res.status(200).send({ message: "Product added successfully", newProduct });
   } catch (error) {
     console.error("Error adding product:", error);
     return res.status(500).json({ message: "Error adding product", error });
-  }
-};
-
-// ✅ Delete Product Function
-const deleteProduct = async (req, res) => {
-  try {
-    const deleted = await product.destroy({ where: { id: req.params.id } });
-
-    if (!deleted) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    return res.status(200).json({ message: "Product deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting product:", error);
-    return res.status(500).json({ message: "Error deleting product", error });
   }
 };
 const AllProduct = async (req, res) => {
@@ -96,11 +63,10 @@ const AllProduct = async (req, res) => {
   }
 };
 
-// ✅ Export all controller functions
+// Export all controller functions
 module.exports = {
-  uploadImage,
   handleImageUpload,
   addProduct,
-  deleteProduct,
-  AllProduct
+  // deleteProduct,
+  AllProduct,
 };

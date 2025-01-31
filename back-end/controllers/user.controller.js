@@ -5,7 +5,7 @@ const jwt=require("jsonwebtoken")
 module.exports = {
   register: async (req, resp) => {
     try {
-      const { name, mail, password } = req.body;
+      const { name, mail, password ,role} = req.body;
 
       
       const check = await user.findOne({ where: { mail } });
@@ -17,7 +17,7 @@ module.exports = {
       const hashedPassword = await bcrypt.hash(password, 15);
 
      
-      const newUser = await user.create({ name: name, mail: mail, password: hashedPassword });
+      const newUser = await user.create({ name: name, mail: mail, password: hashedPassword ,role:role});
 
       // Respond with the created user object
       return resp.status(201).send(newUser);
@@ -31,32 +31,27 @@ module.exports = {
   login: async (req, res) => {
     const { mail, password } = req.body;
 
-  try {
-    const usery = await user.findOne({ where: { mail: mail} });
-    console.log("reached");
+    try {
+      const userr = await user.findOne({ where: { mail } });
+      console.log(userr);
 
-    console.log(usery);
-  
-    if (!usery) {
-      return res.status(404).send({ message: "User not found" });
-    }
+      if (!userr) {
+        return res.status(404).send({ message: "User not found" });
+      }
 
-   
-    const isMatch = await bcrypt.compare(password, usery.password);
+
+      const isMatch = await bcrypt.compare(password, userr.password);
 
 
 
       res.status(200).json({
         message: "Login successful",
         user: {
-          id: usery.id,
-          mail: usery.mail,
-          token: jwt.sign({ id: usery.id }, "1234", { expiresIn: "24h" })
+          id: userr.id,
+          mail: userr.mail,
+          token: jwt.sign({ id: userr.id ,role:userr.role}, "1234", { expiresIn: "24h" })
         },
       });
-      if (!isMatch) {
-        return res.status(401).send({ message: "Invalid credentials" });
-      }
 
     } catch (error) {
       console.error(error);
@@ -76,7 +71,20 @@ module.exports = {
         res.status(500).json({ message: 'error to delete user', error });  
       });
   },
-  
+  getUserIdFromToken : async(req, res) => {
+   try {
+    console.log(req.user)
+    const currentuser=await user.findOne({where:{id:req.user.id}})
+    res.status(200).send(currentuser)
+    res.send("👌👌")
+    
+   } catch (error) {
+     console.error('Failed to decode token:', error);
+     
+    
+   }
+   
+    },
 
   findAllUsers: (req, res) => {
     try {
