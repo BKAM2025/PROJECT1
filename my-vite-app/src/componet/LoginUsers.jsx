@@ -1,39 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/reducers/login";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-// import './LoginUsers.css'; // Import the updated CSS file
+// Import the updated CSS file
+import styles from '../Login.module.css';
+
 
 function LoginUsers() {
   const dispatch = useDispatch();
-  const { loading, isAuthenticated, user } = useSelector((state) => state.login);
+  const { loading, isAuthenticated, error: authError } = useSelector((state) => state.login);
 
   // State for form inputs
   const [mail, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("")
-
-
   const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(mail, password));
-    try {
-      console.log({ mail, password });
-
-      var response = await axios.post("http://localhost:5000/api/user/login", { mail, password })
-      console.log(response);
-      localStorage.setItem("token", response.data.user.token)
-      navigate("/home");
-    }
-    catch (error) {
-      throw error
-    }
-
-    ;
+    dispatch(login(mail, password))
+      .then(() => {
+        if (!isAuthenticated) {
+          setError("Authentication failed. Please check your credentials.");
+        }
+      })
+      .catch(err => {
+        setError("An error occurred during login. Please try again.");
+      });
   };
+
+  useEffect(() => {
+    if (authError) {
+      setError(authError);
+    } else if (isAuthenticated) {
+      navigate('/home');
+    }
+  }, [isAuthenticated, authError, navigate]);
 
 
   // If user is authenticated, redirect them or show a message
@@ -42,46 +44,75 @@ function LoginUsers() {
   // }
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">mail</label>
-          <input
-            type="text"
-            id="name"
-            placeholder="Enter your username"
-            value={mail}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-      <div className="text-center mt-3">
-        <p>
-          Don't have an account?{" "}
-          <a href="#" onClick={() => navigate("/register")}>Create a new user</a>
-        </p>
+    <div className={styles.login__container}>
+      <div className={styles.login__imageSection}>
+        <img
+          src="/path-to-your-shopping-image.jpg"
+          alt="Shopping Cart with Phone"
+          className={styles.login__image}
+        />
       </div>
-      {error && <div style={{ color: "red" }}>{error}</div>}
-    </div>
 
+      <div className={styles.login__formSection}>
+        <div className={styles.login__formWrapper}>
+          <h1 className={styles.login__title}>Log in to Exclusive</h1>
+          <p className={styles.login__subtitle}>Enter your details below</p>
+
+          <form onSubmit={handleSubmit} className={styles.login__form}>
+            <div className={styles.login__inputGroup}>
+              <input
+                type="text"
+                placeholder="Email or Phone Number"
+                value={mail}
+                onChange={(e) => setEmail(e.target.value)}
+                className={styles.login__input}
+                required
+              />
+            </div>
+
+            <div className={styles.login__inputGroup}>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={styles.login__input}
+                required
+              />
+            </div>
+
+            <div className={styles.login__actionRow}>
+              <button
+                type="submit"
+                className={styles.login__button}
+                disabled={loading}
+              >
+                {loading ? "Logging in..." : "Log in"}
+              </button>
+              <a href="#" className={styles.login__forgotPassword}>
+                Forgot Password?
+              </a>
+            </div>
+
+            <button
+              type="button"
+              className={styles.login__googleButton}
+              onClick={() => {/* Handle Google Sign in */ }}
+            >
+              <img src="/google-icon.png" alt="Google" className={styles.login__googleIcon} />
+              Sign in with Google
+            </button>
+
+            <div className={styles.login__signup}>
+              Don't have an account?
+              <a href="/register" className={styles.login__signupLink}>Sign up</a>
+            </div>
+          </form>
+
+          {error && <div className={styles.login__error}>{error}</div>}
+        </div>
+      </div>
+    </div>
   );
 }
 

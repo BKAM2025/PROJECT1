@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../store/reducers/user';
-import axios from "axios"
 import { useNavigate } from 'react-router';
+import styles from './SignUpUser.module.css';
 
-const SingUpUser = () => {
-
+const SignUpUser = () => {
   const [name, setName] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,64 +12,96 @@ const SingUpUser = () => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(registerUser([name, mail, password]));
-    axios.post('http://localhost:5000/api/user/register', {
-      name,
-      mail,
-      password
-    })
-      .then(() => {
-        navigate("/home");
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.error("Error:", error.response.data.message);
-          setErrorMessage(error.response.data.message);
-        } else {
-          setErrorMessage("An unexpected error occurred.");
-        }
-      });
+    try {
+      await dispatch(registerUser({name, mail, password}));
+      navigate("/");
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message || "An unexpected error occurred.");
+    }
   };
+
   return (
-    <div>
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+    <div className={styles.signup__container}>
+      <div className={styles.signup__imageSection}>
+        <img 
+          src="/path-to-your-shopping-image.jpg" 
+          alt="Shopping Cart with Phone" 
+          className={styles.signup__image}
+        />
+      </div>
+      
+      <div className={styles.signup__formSection}>
+        <div className={styles.signup__formWrapper}>
+          <h1 className={styles.signup__title}>Create an account</h1>
+          <p className={styles.signup__subtitle}>Enter your details below</p>
+
+          <form onSubmit={handleSubmit} className={styles.signup__form}>
+            <div className={styles.signup__inputGroup}>
+              <input
+                type="text"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={styles.signup__input}
+                required
+              />
+            </div>
+
+            <div className={styles.signup__inputGroup}>
+              <input
+                type="email"
+                placeholder="Email"
+                value={mail}
+                onChange={(e) => setMail(e.target.value)}
+                className={styles.signup__input}
+                required
+              />
+            </div>
+
+            <div className={styles.signup__inputGroup}>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={styles.signup__input}
+                required
+              />
+            </div>
+
+            <button 
+              type="submit" 
+              className={styles.signup__button}
+              disabled={status === 'loading'}
+            >
+              {status === 'loading' ? 'Creating Account...' : 'Create Account'}
+            </button>
+
+            <button 
+              type="button" 
+              className={styles.signup__googleButton}
+              onClick={() => {/* Handle Google Sign up */}}
+            >
+              <img src="/google-icon.png" alt="Google" className={styles.signup__googleIcon} />
+              Sign up with Google
+            </button>
+
+            <div className={styles.signup__login}>
+              Already have an account? 
+              <a href="/" className={styles.signup__loginLink}>Log in</a>
+            </div>
+          </form>
+
+          {errorMessage && (
+            <div className={styles.signup__error}>{errorMessage}</div>
+          )}
         </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={mail}
-            onChange={(e) => setMail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" disabled={status === 'loading'}>
-          {status === 'loading' ? 'Signing Up...' : 'Sign Up'}
-        </button>
-      </form>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      </div>
     </div>
   );
-}
+};
 
-export default SingUpUser;
+export default SignUpUser;

@@ -1,4 +1,4 @@
-const { admin, product, user } = require("../models/index")
+const { admin, product, user, category } = require("../models/index")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const { where } = require("sequelize");
@@ -107,6 +107,25 @@ module.exports = {
     try {
       const result = await product.findAll({ where: { userId: id } })
       res.status(200).send(result)
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
+    }
+  },
+  gettAllcategory: async (req, res) => {
+    try {
+      const result = await category.findAll()
+      res.status(200).send(result)
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
+    }
+  },
+  addCategoryAdmin: async (req, res) => {
+    const { name } = req.body
+    try {
+      const cat = await category.create({ name })
+      res.status(200).send(cat)
     } catch (err) {
       console.log("errr", err)
       res.status(400).send(err)

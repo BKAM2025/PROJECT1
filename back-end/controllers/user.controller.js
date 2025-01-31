@@ -34,30 +34,22 @@ module.exports = {
     try {
       const userr = await user.findOne({ where: { mail: mail } });
 
-
-      console.log(userr);
-
       if (!userr) {
         return res.status(404).send({ message: "User not found" });
       }
-
-
       const isMatch = await bcrypt.compare(password, userr.password);
-
-
-
-      res.status(200).json({
-        message: "Login successful",
-        user: {
-          id: userr.id,
-          mail: userr.mail,
-          token: jwt.sign({ id: userr.id }, "1234", { expiresIn: "24h" })
-        },
-      });
-      if (!isMatch) {
-        return res.status(401).send({ message: "Invalid credentials" });
+      if (isMatch) {
+        return res.status(200).json({
+          message: "Login successful",
+          user: {
+            id: userr.id,
+            mail: userr.mail,
+            token: jwt.sign({ id: userr.id }, "1234", { expiresIn: "24h" })
+          },
+        });
+      } else {
+        return res.status(401).send({ message: "Incorrect password" });
       }
-
     } catch (error) {
       console.error(error);
       res.status(500).send({ message: "An error occurred", error });
