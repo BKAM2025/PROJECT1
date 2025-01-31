@@ -84,6 +84,37 @@ const ProductList = ({ handleOneProduct }) => {
             <h1 className={styles['fl__main-title']}>Flash Sales</h1>
           </div>
         </div>
+<<<<<<< HEAD
+=======
+        <div className={styles['fl__products-grid']}>
+            {productsToDisplay.map((product) => (
+                <div key={product.id} className={styles['fl__product']}>
+                    <span className={styles['fl__discount-tag']}>-{product.discount}%</span>
+                    <div className={styles['fl__actions']}>
+                        <button className={styles['fl__action-btn']} onClick={()=>{}} >❤️</button>
+                        <button className={styles['fl__action-btn']} onClick={() => handleOneProduct(product)}>👁️</button>
+                    </div>
+                    <img 
+                        src={product.image} 
+                        alt={product.name}
+                        className={styles['fl__product-image']}
+                    />
+                    <h3 className={styles['fl__product-title']}>{product.name}</h3>
+                    <div className={styles['fl__pricing']}>
+                        <span className={styles['fl__price-current']}>${product.currentPrice}</span>
+                        <span className={styles['fl__price-original']}>${product.originalPrice}</span>
+                    </div>
+                    <div className={styles['fl__rating-wrapper']}>
+                        <div className={styles['fl__stars']}>⭐⭐⭐⭐⭐</div>
+                        <span className={styles['fl__review-count']}>({product.reviews})</span>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+    </div>
+);
+>>>>>>> 0b9ac64c06da9b7e49ac65cb4cc1811de7adccbf
 
         <div className={styles['fl__products-grid']}>
           {productsToDisplay.map((product) => (
