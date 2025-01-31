@@ -4,10 +4,12 @@ import Navbar from './navBar';
 import { filterProduct, filterProductByQuery } from '../store/reducers/product.js';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '../ProductList.module.css';
+import {useNavigate} from 'react-router-dom'
 
 
-const ProductList = ({handleOneProduct}) => {
+const ProductList = () => {
   const dispatch = useDispatch();
+   const navigate=useNavigate()
 
   // Get products, filteredProducts, loading, and error from Redux state
   const { products, filteredProducts, loading, error } = useSelector(state => state.product);
@@ -58,8 +60,8 @@ const ProductList = ({handleOneProduct}) => {
                 <div key={product.id} className={styles['fl__product']}>
                     <span className={styles['fl__discount-tag']}>-{product.discount}%</span>
                     <div className={styles['fl__actions']}>
-                        <button className={styles['fl__action-btn']} >❤️</button>
-                        <button className={styles['fl__action-btn']} onClick={() => handleOneProduct(product)}>👁️</button>
+                        <button className={styles['fl__action-btn']} onClick={()=>{}} >❤️</button>
+                        <button className={styles['fl__action-btn']}onClick={() => navigate("/productDetails/:id")}>👁️</button>
                     </div>
                     <img 
                         src={product.image} 

@@ -31,24 +31,14 @@ const user = connection.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  role: { 
+    type: DataTypes.ENUM("user", "seller", "admin"),
+    defaultValue: "user",
+  }
 
 });
 
-const admin = connection.define("admin", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  mail: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
 
-});
 
 
 const category = connection.define("category", {
@@ -61,11 +51,12 @@ const category = connection.define("category", {
 
 
 const cart = connection.define("cart", {
-  quantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  }
+ 
 });
+
+const isFavorite = connection.define("isFavorite", {
+
+})
 
 
 const product = connection.define("product", {
@@ -81,6 +72,7 @@ const product = connection.define("product", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+
 
   image: {
     type: DataTypes.STRING,
@@ -101,10 +93,12 @@ user.hasMany(cart)
 cart.belongsTo(user)
 product.hasMany(cart)
 cart.belongsTo(product)
+user.belongsToMany(product, { through: isFavorite, as: 'FavoriteProducts', foreignKey: 'userId' });
+product.belongsToMany(user, { through: isFavorite, as: 'FavoritedByUsers', foreignKey: 'productId' });
 
 // this call, Sequelize will automatically perform an SQL query to the database and create a table, printing the message car table created successfully!.
 // connection
-//   .sync({ force: false })
+//   .sync({ force: true })
 //   .then(() => {
 //     console.log("car table created successfully!");
 //   })
@@ -112,4 +106,4 @@ cart.belongsTo(product)
 //     console.error("Unable to create table : ", error);
 //   });
 
-module.exports = { user, cart, category, admin, product };
+module.exports = { user, cart, category, product };

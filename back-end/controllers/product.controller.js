@@ -25,7 +25,11 @@ const handleImageUpload = async (req, res) => {
 // Add Product Function
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, stock, userId, categoryId, image } = req.body;
+    if(!req.user.role === "user"){
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { name, price, description, stock, categoryId, image } = req.body;
 
     // Create product entry in database
     const newProduct = await product.create({
@@ -34,7 +38,7 @@ const addProduct = async (req, res) => {
       description,
       stock: parseInt(stock),
       image,
-      userId,
+      userId: req.user.id,
       categoryId,
     });
 
@@ -58,6 +62,25 @@ const AllProduct = async (req, res) => {
     return res.status(500).json({ message: "Error get product", error });
   }
 };
+  const getOneProduct = async (req, res) => {
+    try {
+      const { id } = req.params; // Get product ID from the URL parameters
+  
+      // Find the product by ID
+      const singleProduct = await product.findOne({
+        where: { id: id }, // Assuming you're using Sequelize or similar ORM
+      });
+  
+      if (!singleProduct) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+  
+      return res.status(200).json(singleProduct); // Send the product data
+    } catch (error) {
+      console.error("Error getting product:", error);
+      return res.status(500).json({ message: "Error getting product", error });
+    }
+  };
 
 // Export all controller functions
 module.exports = {
@@ -65,4 +88,5 @@ module.exports = {
   addProduct,
   // deleteProduct,
   AllProduct,
+  getOneProduct
 };
