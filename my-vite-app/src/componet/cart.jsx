@@ -1,22 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate,Link } from 'react-router-dom';
 import styles from '../Cart.module.css';
 import { Trash2, Heart } from 'lucide-react'; // Assuming you're using lucide-react for icons
 
-const Cart = () => {
-  const [cart, setCart] = useState([]);
-  const [amount, setAmount] = useState(0);
-
+const Cart = () => {  
+  const navigate = useNavigate();
   const [quantities, setQuantities] = useState({
     'LCD Monitor': 1,
     'Game Controller': 2
   });
-  
-  const handleCheckout = (m) => {
-    setAmount(m);
-    console.log("Checkout");
-  }
- 
-
   const prices = {
     'LCD Monitor': 650,
     'Game Controller': 550
@@ -123,8 +115,8 @@ const Cart = () => {
               <span>${subtotal.toLocaleString()}</span>
             </div>
           </div>
-
-          <button className={styles.cart__checkoutBtn} onClick={()=>handleCheckout(123)}>
+          <Link to={{pathname:"/payment",state:subtotal}}>aaaa</Link>     
+          <button className={styles.cart__checkoutBtn} onClick={()=>{navigate("/payment",{state:{amount:subtotal}})}}>
             Proceed to Checkout
           </button>
 

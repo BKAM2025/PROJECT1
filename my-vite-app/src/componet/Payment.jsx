@@ -8,8 +8,11 @@ import Swal from "sweetalert2";
 
 const stripePromise = loadStripe("pk_test_51QnFpLKbF047pIERqqM4AE8tkMoemAYpXJfPAsp45AEo3zEi9tmC7P6QzVDlX7VLWztNbm9UoHkwgv9akW3UNWE700b4qdbZR9");
 
-const PaymentForm = ({ amount }) => {
-  amount=123
+const PaymentForm = () => {
+ const {state}=useLocation()
+ const amount=state.amount
+ console.log("amount",amount);
+ 
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
@@ -28,7 +31,9 @@ const PaymentForm = ({ amount }) => {
         const { error, paymentMethod } = await stripe.createPaymentMethod({
           type: "card",
           card: elements.getElement(CardElement),
+          
         });
+        
 
         if (error) {
           throw error;
@@ -42,7 +47,7 @@ const PaymentForm = ({ amount }) => {
           id: paymentMethod.id,
         });
 
-        
+
         if (response.data.success) {
           setSuccess(true);
           Swal.fire({
@@ -51,6 +56,7 @@ const PaymentForm = ({ amount }) => {
             text: 'Thank you for your purchase!',
           }).then(() => {
             navigate("/payment-success");
+            navigate("/home")
           });
         } else {
           throw new Error(response.data.message || "Payment failed");
