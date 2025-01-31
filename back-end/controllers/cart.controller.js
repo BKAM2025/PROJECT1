@@ -1,4 +1,4 @@
-const { cart, product} = require("../models/index");
+const { cart, product, user } = require("../models/index");
 
 module.exports = {
   addToCart: async (req, res) => {
@@ -6,7 +6,7 @@ module.exports = {
       let { userId, productId, quantity } = req.body;
   
       
-      // userId = parseInt(userId, 10);
+      userId = parseInt(userId, 10);
   
   
       const existingUser = await user.findByPk(userId);
@@ -43,7 +43,8 @@ module.exports = {
       const { userId } = req.params;
 
       const cartItems = await cart.findAll({
-        where: { userId }
+        where: { userId },
+        include: product
       });
 
       res.status(200).json(cartItems);

@@ -4,7 +4,7 @@ import axios from 'axios';
 function CartList() {
   const [cartItems, setCartItems] = useState([]);
 
-  // ... existing fetchCartItems and useEffect code ...
+ 
 
   const removeFromCart = async (productId) => {
     try {

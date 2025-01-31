@@ -18,7 +18,6 @@ function LoginUsers() {
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
-<<<<<<< HEAD
     dispatch(login(mail, password))
       .then(() => {
         if (!isAuthenticated) {
@@ -28,20 +27,6 @@ function LoginUsers() {
       .catch(err => {
         setError("An error occurred during login. Please try again.");
       });
-=======
-    await dispatch(login(mail, password));
-    try {
-      console.log({ mail, password });
-
-      var response = await axios.post("http://localhost:5000/api/user/login", { mail, password })
-      console.log(response);
-      localStorage.setItem("token", response.data.user.token)
-      navigate("/home");
-    }
-    catch (error) {
-      throw error
-    }
->>>>>>> 0b9ac64c06da9b7e49ac65cb4cc1811de7adccbf
   };
 
   useEffect(() => {
