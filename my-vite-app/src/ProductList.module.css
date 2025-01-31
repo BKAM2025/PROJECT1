@@ -164,3 +164,15 @@
     margin: 8px 0;
     color: #333;
 }
+.fl__action-btn {
+    /* ... existing styles ... */
+    transition: transform 0.2s ease;
+  }
+  
+  .fl__favorite-active {
+    transform: scale(1.1);
+  }
+  
+  .fl__action-btn:hover {
+    transform: scale(1.1);
+  }
