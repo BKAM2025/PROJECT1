@@ -1,42 +1,27 @@
 import React, { useState ,useEffect} from "react";
 import axios from "axios";
 import { FilePlus } from "lucide-react";
-import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 import "../AddProduct.css";
 
 const AddProduct = ({ className = "" ,fetch}) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [currentId, setCurrent] = useState(null);
-  console.log("currentId",currentId) ;
+
+
   const [product, setProduct] = useState({
     name: "",
     price: "",
     description: "",
     image: "",
     stock: "",
-    userId:currentId
+ 
   });
   
-  console.log("currentId",currentId) ;
-  const getUserIdFromToken = async() => {
-    try {
-      const token = await localStorage.getItem('token')
-      console.log( "token👌👌",token);
-      if (!token) return null;
-      const {id} =await jwtDecode(token);
-      setCurrent(id)
-    console.log( "my id👌👌",id);
-    } catch (error) {
-      console.error('Failed to decode token:', error);
-      return null;
-    }
-  };
-  useEffect(() => {
-    getUserIdFromToken()
-  }, []);
-  console.log("❤️❤️❤️",currentId)
+
+  
+
+
 
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
@@ -70,7 +55,7 @@ const AddProduct = ({ className = "" ,fetch}) => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/product/add", product);
+      const response = await axios.post("http://localhost:5000/api/product/add", product,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
       if (response.status === 200) {
         alert("Product added successfully!");
       } else {

@@ -34,8 +34,6 @@ function LoginUsers() {
     catch (error) {
       throw error
     }
-
-    ;
   };
 
 

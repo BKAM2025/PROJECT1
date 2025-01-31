@@ -1,11 +1,11 @@
-const { user } = require("../models/index")
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+const {user}=require("../models/index")
+const bcrypt=require("bcrypt")
+const jwt=require("jsonwebtoken")
 
 module.exports = {
   register: async (req, resp) => {
     try {
-      const { name, mail, password } = req.body;
+      const { name, mail, password ,role} = req.body;
 
       
       const check = await user.findOne({ where: { mail } });
@@ -17,7 +17,7 @@ module.exports = {
       const hashedPassword = await bcrypt.hash(password, 15);
 
      
-      const newUser = await user.create({ name: name, mail: mail, password: hashedPassword });
+      const newUser = await user.create({ name: name, mail: mail, password: hashedPassword ,role:role});
 
       // Respond with the created user object
       return resp.status(201).send(newUser);
@@ -49,7 +49,7 @@ module.exports = {
         user: {
           id: userr.id,
           mail: userr.mail,
-          token: jwt.sign({ id: userr.id }, "1234", { expiresIn: "24h" })
+          token: jwt.sign({ id: userr.id ,role:userr.role}, "1234", { expiresIn: "24h" })
         },
       });
 
@@ -62,16 +62,29 @@ module.exports = {
   deleted: (req, res) => {
     user.destroy({
       where: {
-        id: req.params.id
-      }
-    })
+        id:req.params.id
+      }})
       .then(() => {
-        res.status(200).json({ message: "delete user" });
+        res.status(200).json({message:"delete user"});  
       })
       .catch((error) => {
-        res.status(500).json({ message: 'error to delete user', error });
+        res.status(500).json({ message: 'error to delete user', error });  
       });
   },
+  getUserIdFromToken : async(req, res) => {
+   try {
+    console.log(req.user)
+    const currentuser=await user.findOne({where:{id:req.user.id}})
+    res.status(200).send(currentuser)
+    res.send("👌👌")
+    
+   } catch (error) {
+     console.error('Failed to decode token:', error);
+     
+    
+   }
+   
+    },
 
   findAllUsers: (req, res) => {
     try {
