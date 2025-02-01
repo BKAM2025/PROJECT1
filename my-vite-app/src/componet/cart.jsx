@@ -1,134 +1,189 @@
-import React, { useState } from 'react';
-import { useNavigate,Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { Trash2, Heart, ShoppingBag, Minus, Plus } from 'lucide-react';
+import { toast } from 'react-toastify';
+import EmptyCart from './EmptyCart';
 import styles from '../Cart.module.css';
-import { Trash2, Heart } from 'lucide-react'; // Assuming you're using lucide-react for icons
 
-const Cart = () => {  
+const Cart = () => {
   const navigate = useNavigate();
-  const [quantities, setQuantities] = useState({
-    'LCD Monitor': 1,
-    'Game Controller': 2
-  });
-  const prices = {
-    'LCD Monitor': 650,
-    'Game Controller': 550
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [couponCode, setCouponCode] = useState('');
+
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+
+  const fetchCartItems = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('Please login to view your cart');
+        navigate('/login');
+        return;
+      }
+
+      const response = await axios.get('http://localhost:5000/api/cart/get', {
+        headers: { authorization: `Bearer ${token}` }
+      });
+      console.log('Cart response:', response.data);
+      setCartItems(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+      toast.error(error.response?.data?.message || 'Failed to load cart items');
+      setLoading(false);
+    }
   };
 
-  const updateQuantity = (product, value) => {
-    setQuantities(prev => ({
-      ...prev,
-      [product]: Math.max(0, value)
-    }));
+  const updateQuantity = async (productId, newQuantity) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.put('http://localhost:5000/api/cart/update', 
+        { productId, quantity: newQuantity },
+        { headers: { authorization: `Bearer ${token}` }}
+      );
+      fetchCartItems();
+      toast.success('Cart updated');
+    } catch (error) {
+      toast.error('Failed to update quantity');
+    }
   };
 
-  const subtotal = Object.entries(quantities).reduce(
-    (sum, [product, quantity]) => sum + prices[product] * quantity,
-    0
-  );
+  const removeFromCart = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete('http://localhost:5000/api/cart/remove', {
+        headers: { authorization: `Bearer ${token}` },
+        data: { productId }
+      });
+      fetchCartItems();
+      toast.success('Item removed from cart');
+    } catch (error) {
+      toast.error('Failed to remove item');
+    }
+  };
+
+  const addToWishlist = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:5000/api/isFavorite/add', 
+        { productId },
+        { headers: { authorization: `Bearer ${token}` }}
+      );
+      toast.success('Added to wishlist');
+    } catch (error) {
+      toast.error('Failed to add to wishlist');
+    }
+  };
+
+  const handleCheckout = () => {
+    const total = calculateTotal();
+    navigate('/payment', { state: { amount: total }});
+  };
+
+  const calculateTotal = () => {
+    return cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.loading}>
+        <ShoppingBag className={styles.loadingIcon} />
+        <p>Loading your cart...</p>
+      </div>
+    );
+  }
+
+  if (cartItems.length === 0) {
+    return <EmptyCart />;
+  }
 
   return (
-    <div className={styles.cart}>
-      <h1 className={styles.cart__title}>Shopping Cart</h1>
+    <div className={styles.cartContainer}>
+      <h1 className={styles.cartTitle}>Shopping Cart</h1>
       
-      <div className={styles.cart__content}>
-        <div className={styles.cart__itemsSection}>
-          <div className={styles.cart__header}>
-            <div className={styles.cart__headerProduct}>Product</div>
-            <div className={styles.cart__headerPrice}>Price</div>
-            <div className={styles.cart__headerQuantity}>Quantity</div>
-            <div className={styles.cart__headerSubtotal}>Subtotal</div>
-            <div className={styles.cart__headerActions}>Actions</div>
-          </div>
-
-          <div className={styles.cart__items}>
-            {Object.entries(quantities).map(([product, quantity]) => (
-              <div key={product} className={styles.cart__item}>
-                <div className={styles.cart__product}>
-                  <img src={`/${product.toLowerCase().replace(' ', '-')}.jpg`} alt={product} />
-                  <div className={styles.cart__productInfo}>
-                    <h3>{product}</h3>
-                    <p>Color: Black</p>
-                    <p>Size: Medium</p>
-                  </div>
-                </div>
+      <div className={styles.cartContent}>
+        <div className={styles.cartItems}>
+          {cartItems.map((item) => (
+            <div key={item.productId} className={styles.cartItem}>
+              <div className={styles.productImage}>
+                <img src={item.product.image} alt={item.product.name} />
+              </div>
+              
+              <div className={styles.productInfo}>
+                <h3>{item.product.name}</h3>
+                <p className={styles.productPrice}>${item.product.price}</p>
                 
-                <div className={styles.cart__price}>
-                  ${prices[product].toLocaleString()}
-                </div>
-
-                <div className={styles.cart__quantity}>
+                <div className={styles.quantityControls}>
                   <button 
-                    onClick={() => updateQuantity(product, quantity - 1)}
-                    className={styles.cart__quantityBtn}
+                    onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                    disabled={item.quantity <= 1}
                   >
-                    -
+                    <Minus size={16} />
                   </button>
-                  <span className={styles.cart__quantityNum}>{quantity}</span>
+                  <span>{item.quantity}</span>
                   <button 
-                    onClick={() => updateQuantity(product, quantity + 1)}
-                    className={styles.cart__quantityBtn}
+                    onClick={() => updateQuantity(item.productId, item.quantity + 1)}
                   >
-                    +
-                  </button>
-                </div>
-
-                <div className={styles.cart__subtotal}>
-                  ${(prices[product] * quantity).toLocaleString()}
-                </div>
-
-                <div className={styles.cart__itemActions}>
-                  <button className={styles.cart__actionBtn}>
-                    <Heart size={20} />
-                  </button>
-                  <button className={styles.cart__actionBtn}>
-                    <Trash2 size={20} />
+                    <Plus size={16} />
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
-
-          <div className={styles.cart__buttons}>
-            <button className={styles.cart__returnBtn}>
-              Return to Shop
-            </button>
-            <button className={styles.cart__updateBtn}>
-              Update Cart
-            </button>
-          </div>
+              
+              <div className={styles.itemActions}>
+                <button 
+                  className={styles.actionButton}
+                  onClick={() => addToWishlist(item.productId)}
+                >
+                  <Heart size={20} />
+                </button>
+                <button 
+                  className={styles.actionButton}
+                  onClick={() => removeFromCart(item.productId)}
+                >
+                  <Trash2 size={20} />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className={styles.cart__checkout}>
-          <h2>Cart Total</h2>
+        <div className={styles.cartSummary}>
+          <h2>Order Summary</h2>
           
-          <div className={styles.cart__summary}>
-            <div className={styles.cart__summaryRow}>
-              <span>Subtotal:</span>
-              <span>${subtotal.toLocaleString()}</span>
+          <div className={styles.summaryDetails}>
+            <div className={styles.summaryRow}>
+              <span>Subtotal</span>
+              <span>${calculateTotal().toFixed(2)}</span>
             </div>
-            <div className={styles.cart__summaryRow}>
-              <span>Shipping:</span>
+            <div className={styles.summaryRow}>
+              <span>Shipping</span>
               <span>Free</span>
             </div>
-            <div className={styles.cart__summaryTotal}>
-              <span>Total:</span>
-              <span>${subtotal.toLocaleString()}</span>
+            <div className={styles.summaryTotal}>
+              <span>Total</span>
+              <span>${calculateTotal().toFixed(2)}</span>
             </div>
           </div>
-          <Link to={{pathname:"/payment",state:subtotal}}>aaaa</Link>     
-          <button className={styles.cart__checkoutBtn} onClick={()=>{navigate("/payment",{state:{amount:subtotal}})}}>
+
+          <button 
+            className={styles.checkoutButton}
+            onClick={handleCheckout}
+          >
             Proceed to Checkout
           </button>
 
-          <div className={styles.cart__coupon}>
-            <input 
-              type="text" 
-              placeholder="Coupon Code"
-              className={styles.cart__couponInput}
+          <div className={styles.couponSection}>
+            <input
+              type="text"
+              placeholder="Enter coupon code"
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
             />
-            <button className={styles.cart__couponBtn}>
-              Apply Coupon
-            </button>
+            <button>Apply Coupon</button>
           </div>
         </div>
       </div>

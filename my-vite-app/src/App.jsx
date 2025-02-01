@@ -16,6 +16,8 @@ import Payment from './componet/Payment.jsx';
 // import Home from "./componet/home.jsx"
 import ProductDetails from './componet/ProductDetails.jsx';
 import './App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [product, setProducts] = useState([]);
@@ -60,6 +62,7 @@ function App() {
           </Routes>
         </Router>
       </Provider>
+      <ToastContainer position="bottom-right" />
       <Footer />
     </div>
   );

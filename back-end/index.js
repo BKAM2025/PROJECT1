@@ -21,7 +21,7 @@ App.use("/api/user", userRoute)
 App.use("/api/admin", RouterAdmin)
 App.use("/api/product", productRoute)
 
-App.use("/api/cart", RouterCart)
+App.use("/api/cart", RouterCart);
 App.use("/api/product", RouterProduct)
 App.use("/api/isFavorite", RouterIsFavorite)
 
