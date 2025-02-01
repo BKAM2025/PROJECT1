@@ -50,7 +50,14 @@ const category = connection.define("category", {
 
 
 const cart = connection.define("cart", {
- 
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 1,
+    validate: {
+      min: 1
+    }
+  }
 });
 
 const isFavorite = connection.define("isFavorite", {
@@ -86,15 +93,17 @@ const product = connection.define("product", {
   },
 
 });
-
+//user
 user.hasMany(product)
 product.belongsTo(user)
 category.hasMany(product)
 product.belongsTo(category)
+//cart
 user.hasMany(cart)
 cart.belongsTo(user)
 product.hasMany(cart)
 cart.belongsTo(product)
+//favorite
 user.belongsToMany(product, { through: isFavorite, as: 'FavoriteProducts', foreignKey: 'userId' });
 product.belongsToMany(user, { through: isFavorite, as: 'FavoritedByUsers', foreignKey: 'productId' });
 

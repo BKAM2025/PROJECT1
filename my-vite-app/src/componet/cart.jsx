@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router';
+import { Trash2, Heart, ShoppingBag, Minus, Plus } from 'lucide-react';
+import { toast } from 'react-toastify';
+import EmptyCart from './EmptyCart';
+import styles from '../Cart.module.css';
 
-function CartList() {
-  const [cartItems, setCartItems] = useState([]);
-  const [couponCode, setCouponCode] = useState('');
-
+const Cart = () => {
   const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [couponCode, setCouponCode] = useState('');
 
   useEffect(() => {
     fetchCartItems();
@@ -14,195 +18,177 @@ function CartList() {
 
   const fetchCartItems = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/cart/get');
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('Please login to view your cart');
+        navigate('/login');
+        return;
+      }
+
+      const response = await axios.get('http://localhost:5000/api/cart/get', {
+        headers: { authorization: `Bearer ${token}` }
+      });
+      console.log('Cart response:', response.data);
       setCartItems(response.data);
+      setLoading(false);
     } catch (error) {
-      console.error('Failed to fetch cart items:', error);
+      console.error('Error fetching cart:', error);
+      toast.error(error.response?.data?.message || 'Failed to load cart items');
+      setLoading(false);
     }
   };
 
-  const updateQuantity = async (itemId, newQuantity) => {
+  const updateQuantity = async (productId, newQuantity) => {
     try {
-      await axios.put(`http://localhost:5000/api/cart/update/${itemId}`, {
-        quantity: newQuantity
+      const token = localStorage.getItem('token');
+      await axios.put('http://localhost:5000/api/cart/update', 
+        { productId, quantity: newQuantity },
+        { headers: { authorization: `Bearer ${token}` }}
+      );
+      fetchCartItems();
+      toast.success('Cart updated');
+    } catch (error) {
+      toast.error('Failed to update quantity');
+    }
+  };
+
+  const removeFromCart = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete('http://localhost:5000/api/cart/remove', {
+        headers: { authorization: `Bearer ${token}` },
+        data: { productId }
       });
       fetchCartItems();
+      toast.success('Item removed from cart');
     } catch (error) {
-      console.error('Failed to update quantity:', error);
+      toast.error('Failed to remove item');
     }
   };
 
-  const applyCoupon = () => {
-    // Implement coupon logic here
-    console.log('Applying coupon:', couponCode);
+  const addToWishlist = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:5000/api/isFavorite/add', 
+        { productId },
+        { headers: { authorization: `Bearer ${token}` }}
+      );
+      toast.success('Added to wishlist');
+    } catch (error) {
+      toast.error('Failed to add to wishlist');
+    }
   };
 
-  const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0).toFixed(2);
+  const handleCheckout = () => {
+    const total = calculateTotal();
+    navigate('/payment', { state: { amount: total }});
   };
+
+  const calculateTotal = () => {
+    return cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.loading}>
+        <ShoppingBag className={styles.loadingIcon} />
+        <p>Loading your cart...</p>
+      </div>
+    );
+  }
+
+  if (cartItems.length === 0) {
+    return <EmptyCart />;
+  }
 
   return (
-    <div className="cart-container" style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div className="cart-header" style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-        <span onClick={()=>{navigate("/home")}}  >Home</span>
-        <span>/</span>
-        <span>Cart</span>
-      </div>
-
-      <div className="cart-content">
-        {/* Cart Headers */}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: '2fr 1fr 1fr 1fr', 
-          gap: '20px',
-          padding: '10px 0',
-          borderBottom: '1px solid #eee'
-        }}>
-          <div>Product</div>
-          <div>Price</div>
-          <div>Quantity</div>
-          <div>Subtotal</div>
+    <div className={styles.cartContainer}>
+      <h1 className={styles.cartTitle}>Shopping Cart</h1>
+      
+      <div className={styles.cartContent}>
+        <div className={styles.cartItems}>
+          {cartItems.map((item) => (
+            <div key={item.productId} className={styles.cartItem}>
+              <div className={styles.productImage}>
+                <img src={item.product.image} alt={item.product.name} />
+              </div>
+              
+              <div className={styles.productInfo}>
+                <h3>{item.product.name}</h3>
+                <p className={styles.productPrice}>${item.product.price}</p>
+                
+                <div className={styles.quantityControls}>
+                  <button 
+                    onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                    disabled={item.quantity <= 1}
+                  >
+                    <Minus size={16} />
+                  </button>
+                  <span>{item.quantity}</span>
+                  <button 
+                    onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                  >
+                    <Plus size={16} />
+                  </button>
+                </div>
+              </div>
+              
+              <div className={styles.itemActions}>
+                <button 
+                  className={styles.actionButton}
+                  onClick={() => addToWishlist(item.productId)}
+                >
+                  <Heart size={20} />
+                </button>
+                <button 
+                  className={styles.actionButton}
+                  onClick={() => removeFromCart(item.productId)}
+                >
+                  <Trash2 size={20} />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Cart Items */}
-        {cartItems.map((item) => (
-          <div key={item.id} style={{ 
-            display: 'grid',
-            gridTemplateColumns: '2fr 1fr 1fr 1fr',
-            gap: '20px',
-            padding: '20px 0',
-            borderBottom: '1px solid #eee',
-            alignItems: 'center'
-          }}>
-            <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-              <img 
-                src={item.product.image} 
-                alt={item.product.name}
-                style={{ width: '80px', height: '80px', objectFit: 'cover' }}
-              />
-              <span>{item.product.name}</span>
+        <div className={styles.cartSummary}>
+          <h2>Order Summary</h2>
+          
+          <div className={styles.summaryDetails}>
+            <div className={styles.summaryRow}>
+              <span>Subtotal</span>
+              <span>${calculateTotal().toFixed(2)}</span>
             </div>
-            <div>${item.product.price}</div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ 
-                display: 'flex',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                overflow: 'hidden'
-              }}>
-                <button 
-                  onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
-                  style={{ padding: '5px 10px', border: 'none', background: '#f5f5f5' }}
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 0)}
-                  style={{ 
-                    width: '50px', 
-                    textAlign: 'center',
-                    border: 'none',
-                    borderLeft: '1px solid #ddd',
-                    borderRight: '1px solid #ddd'
-                  }}
-                />
-                <button 
-                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                  style={{ padding: '5px 10px', border: 'none', background: '#f5f5f5' }}
-                >
-                  +
-                </button>
-              </div>
+            <div className={styles.summaryRow}>
+              <span>Shipping</span>
+              <span>Free</span>
             </div>
-            <div>${(item.product.price * item.quantity).toFixed(2)}</div>
+            <div className={styles.summaryTotal}>
+              <span>Total</span>
+              <span>${calculateTotal().toFixed(2)}</span>
+            </div>
           </div>
-        ))}
 
-        {/* Coupon and Cart Total */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between',
-          marginTop: '30px',
-          gap: '20px'
-        }}>
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <button 
+            className={styles.checkoutButton}
+            onClick={handleCheckout}
+          >
+            Proceed to Checkout
+          </button>
+
+          <div className={styles.couponSection}>
             <input
               type="text"
-              placeholder="Coupon Code"
+              placeholder="Enter coupon code"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value)}
-              style={{ 
-                padding: '10px',
-                border: '1px solid #ddd',
-                borderRadius: '4px'
-              }}
             />
-            <button
-              onClick={applyCoupon}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#E32D2D',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
-              Apply Coupon
-            </button>
-          </div>
-
-          <div style={{ 
-            width: '300px',
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            padding: '20px'
-          }}>
-            <h3 style={{ marginBottom: '15px' }}>Cart Total</h3>
-            <div style={{ 
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Subtotal:</span>
-                <span>${calculateSubtotal()}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Shipping:</span>
-                <span>Free</span>
-              </div>
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between',
-                borderTop: '1px solid #ddd',
-                paddingTop: '10px',
-                marginTop: '10px'
-              }}>
-                <span>Total:</span>
-                <span>${calculateSubtotal()}</span>
-              </div>
-              <button
-                style={{
-                  padding: '12px',
-                  backgroundColor: '#E32D2D',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  marginTop: '10px'
-                }}
-              >
-                Process to checkout
-              </button>
-            </div>
+            <button>Apply Coupon</button>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default CartList;
+export default Cart;
