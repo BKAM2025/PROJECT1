@@ -1,69 +1,169 @@
-const { category} = require("../models/index")
+const { category, product } = require("../models/index");
 
 module.exports = {
-  add: (req, res) => {
-    category.create(req.body)
-      .then((category) => {
-        res.status(200).json(category)
-      })
-      .catch((error) => {
-        res.status(500).json({ message: 'Error to add category', error })
-      })
+  // Add new category
+  add: async (req, res) => {
+    try {
+      const newCategory = await category.create(req.body);
+      res.status(201).json({
+        success: true,
+        message: 'Category created successfully',
+        data: newCategory
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Error creating category',
+        error: error.message
+      });
+    }
   },
-  getAll: (req, res) => {
-    category.findAll()
-      .then((category) => {
-        res.status(200).json(category)
-      })
-      .catch((error) => {
-        res.status(500).json({ message: 'Error to get category', error })
-      })
-  },
-  getProductBycategoryName: (req, res) => {
-    const categoryName = req.params.name
 
-    category.findOne({
-      where: { category: categoryName },
-      include: [{
-        model: car,
-        required: true,
-        attributes: ['matricule', 'marque', 'model', 'carburant', 'price', 'imageUrl', 'disponible'],
-      }]
-    })
-    .then(category => {
-      if (category) {
-        res.status(200).json(category.cars)
-      } else {
-        res.status(404).json({ message: 'Category not found' })
+  // Get all categories
+  getAll: async (req, res) => {
+    try {
+      const categories = await category.findAll({
+        
+      });
+      res.status(200).json({
+        success: true,
+        data: categories
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Error fetching categories',
+        error: error.message
+      });
+    }
+  },
+
+  // Get products by category name
+   getProductByCategoryName :async (req, res) => {
+    try {
+        const { name } = req.params;
+        
+        const categoryFound = await category.findOne({
+            where: { name }
+        });
+
+        if (!categoryFound) {
+            return res.status(404).json({
+                success: false,
+                message: `Category "${name}" not found`
+            });
+        }
+
+        const products = await product.findAll({
+            where: { categoryId: categoryFound.id },
+            include: [{
+                model: category,
+                attributes: ['name', 'icon']
+            }]
+        });
+
+        return res.status(200).json({
+            success: true,
+            data: products
+        });
+
+    } catch (error) {
+        console.error('Error in getProductByCategoryName:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error fetching products by category',
+            error: error.message
+        });
+    }
+},
+
+  // Get products by category ID
+  getProductByCategoryId: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const categoryWithProducts = await category.findOne({
+        where: { id },
+        include: [{
+          model: product,
+          attributes: ['id', 'name', 'price', 'description', 'image', 'stock']
+        }]
+      });
+
+      if (!categoryWithProducts) {
+        return res.status(404).json({
+          success: false,
+          message: 'Category not found'
+        });
       }
-    })
-    .catch(err => {
-      console.error('Error fetching cars:', err)
-      res.status(500).json({ message: 'Internal Server Error' })
-    })
+
+      res.status(200).json({
+        success: true,
+        data: categoryWithProducts
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Error fetching products by category ID',
+        error: error.message
+      });
+    }
   },
 
-  getcarsByCategoryId: (req, res) => {
-    const categoryId = req.params.categoryId
+  // Update category
+  updateCategory: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const [updated] = await category.update(req.body, {
+        where: { id }
+      });
 
-    category.findOne({
-      where: { id: categoryId },
-      include: [{
-        model: car,
-        required: true,
-        attributes: ['matricule', 'marque', 'moodel', 'carburant', 'price', 'imageUrl', 'disponible'],
-      }]
-    })
-    .then(category => {
-      if (category) {
-        res.status(200).json(category.cars)
-      } else {
-        res.status(404).json({ message: 'Category not found' })
+      if (!updated) {
+        return res.status(404).json({
+          success: false,
+          message: 'Category not found'
+        });
       }
-    })
-    .catch(err => {
-      console.error('Error fetching cars:', err)
-      res.status(500).json({ message: 'Internal Server Error' })
-    })
+
+      const updatedCategory = await category.findByPk(id);
+      res.status(200).json({
+        success: true,
+        message: 'Category updated successfully',
+        data: updatedCategory
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Error updating category',
+        error: error.message
+      });
+    }
   },
-}
+
+  // Delete category
+  deleteCategory: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await category.destroy({
+        where: { id }
+      });
+
+      if (!deleted) {
+        return res.status(404).json({
+          success: false,
+          message: 'Category not found'
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: 'Category deleted successfully'
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Error deleting category',
+        error: error.message
+      });
+    }
+  }
+};

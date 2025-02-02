@@ -12,13 +12,10 @@ const initialState = {
 export const filterProduct = createAsyncThunk(
     'product/getAll',
     async () => {
-      console.log("Fetching products...");
       try {
         const response = await axios.get('http://localhost:5000/api/product/getAll');
-        console.log("Fetched products:", response.data); // Log the response data
         return response.data; // Ensure you're returning the data here
       } catch (error) {
-        console.log("Error fetching products:", error);
         return error.response.data.message
       }
     }

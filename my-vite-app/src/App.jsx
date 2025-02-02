@@ -14,10 +14,13 @@ import Favorites from './componet/favorite.jsx';
 import Footer from './componet/Footer.jsx';
 import Payment from './componet/Payment.jsx';
 // import Home from "./componet/home.jsx"
+import Categories from './componet/Categories.jsx';
+import CategoryProducts from './componet/CategoryProducts.jsx';
 import ProductDetails from './componet/ProductDetails.jsx';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   const [product, setProducts] = useState([]);
@@ -27,7 +30,6 @@ function App() {
   const fetchProduct = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/product/getAll");
-      console.log("Fetched Data:", response.data);
       setProducts(response.data);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -59,6 +61,8 @@ function App() {
             <Route path="/favorites" element={< Favorites/>} />
             <Route path="/profile" element={< Profile />} />
             <Route path="/payment" element={< Payment />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/category/:categoryId" element={<CategoryProducts />} /> 
           </Routes>
         </Router>
       </Provider>

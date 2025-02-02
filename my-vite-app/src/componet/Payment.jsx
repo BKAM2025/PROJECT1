@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import styles from '../styles/Payment.module.css';
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -75,7 +76,9 @@ const PaymentForm = () => {
   };
 
   return (
-    <div className="payment-container">
+    <div className={styles['payment-container']}>
+  <form className={styles['payment-form']}>
+  <div className="payment-container">
       <form onSubmit={handleSubmit} className="payment-form">
         <h2>Payment</h2>
         <div className="payment-methods">
@@ -98,6 +101,10 @@ const PaymentForm = () => {
         {success && <div className="success">Payment Successful!</div>}
       </form>
     </div>
+  </form>
+</div>
+    
+   
   );
 };
 

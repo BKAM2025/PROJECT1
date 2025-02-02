@@ -1,45 +1,67 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { filterProductByQuery } from '../store/reducers/product.js';
-import {Heart, ShoppingCart, User } from "lucide-react"
+import { Heart, ShoppingCart, User, Search } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
-const Navbar = () => {
-  const navigate=useNavigate()
-  const dispatch = useDispatch();
-  const [query, setQuery] = useState("");  
+import styles from '../styles/Navbar.module.css';
 
- 
+const Navbar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [query, setQuery] = useState("");
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      e.preventDefault(); 
-      dispatch(filterProductByQuery(query));  
+      e.preventDefault();
+      dispatch(filterProductByQuery(query));
     }
   };
 
   return (
-    <nav className="navbar">
-      <div className="nav-links">
+    <nav className={styles.navbar}>
+      <a href="/home" className={styles.logo}>
+        Exclusive
+      </a>
+
+      <div className={styles['nav-center']}>
         <a href="/home">Home</a>
         <a href="/contact">Contact</a>
         <a href="/about">About</a>
-        <a href="/" onClick={() => { localStorage.removeItem("token"); }}>Logout</a>
+        <a href="/" onClick={() => localStorage.clear()}>Sign Up</a>
       </div>
 
-      <div className="nav-right">
-        <form className="d-flex" role="search">
+      <div className={styles['nav-right']}>
+        <div className={styles['search-container']}>
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}  
-            onKeyDown={handleKeyDown} 
-            placeholder="Search products..."
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="What are you looking for?"
+            className={styles['search-input']}
           />
-        </form>
+          <button className={styles['search-button']}>
+            <Search size={20} />
+          </button>
+        </div>
 
-        <a href="/addProduct" className="add-product-btn">Add Product</a>
-        <a href="/favorites"><Heart size={22} className="icon" onClick={()=>{navigate("/favorites")}}/></a>
-        <a href="/cart"><ShoppingCart size={22} className="icon" /></a>
-        <a href="/profile"><User size={22} className="icon" /></a>
+        <div className={styles['nav-icons']}>
+          <Heart 
+            size={24} 
+            className={styles.icon}
+            onClick={() => navigate("/favorites")}
+          />
+          <ShoppingCart 
+            size={24} 
+            className={styles.icon}
+            onClick={() => navigate("/cart")}
+          />
+          <User 
+            size={24} 
+            className={styles.icon}
+            onClick={() => navigate("/profile")}
+          />
+        </div>
       </div>
     </nav>
   );

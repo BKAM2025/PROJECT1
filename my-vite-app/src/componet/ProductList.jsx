@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
-import ProductDetails from "./ProductDetails";
 import Navbar from './navBar';
+import Categories from './Categories';
+import Slider from './Slider';
+import { useNavigate } from 'react-router-dom';
 import { filterProduct, filterProductByQuery } from '../store/reducers/product.js';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '../ProductList.module.css';
 import  axios from 'axios';
 import { toast } from 'react-toastify';
-const ProductList = ({handleOneProduct}) => {
+const ProductList = () => {
+  const navigate = useNavigate();
   const [favorites, setFavorites] = useState({});
+  const handleViewDetails = (product) => {
+    navigate(`/productDetails/${product.id}`, { state: { product } });
+  };
   const addToCart = async (productId) => {
     try {
       const token = localStorage.getItem('token');
@@ -57,7 +63,7 @@ console.log("start");
       console.error('Failed to fetch favorites:', error);
     }
   };
-
+  
   // Render loading state
   if (loading) {
     return <p>Loading products...</p>;
@@ -92,6 +98,15 @@ console.log("start");
 
     <div>
     <Navbar />
+    <div className={styles.mainContainer}>
+        <aside className={styles.sidebar}>
+          <Categories />
+        </aside>
+        <main className={styles.content}>
+          <Slider />
+          
+        </main>
+      </div>
     <div className={styles['fl__container']}>
         <div className={styles['fl__header']}>
             <div className={styles['fl__title-group']}>
@@ -111,7 +126,7 @@ console.log("start");
         <div className={styles['fl__products-grid']}>
             {productsToDisplay.map((product) => (
                 <div key={product.id} className={styles['fl__product']}>
-                    <span className={styles['fl__discount-tag']}>-{product.discount}%</span>
+                    <span className={styles['fl__discount-tag']}>-{20}%</span>
                     <div className={styles['fl__actions']}>
                     <button 
                       className={`${styles['fl__action-btn']} ${favorites[product.id] ? styles['fl__favorite-active'] : ''}`} 
@@ -120,7 +135,7 @@ console.log("start");
                       {favorites[product.id] ? '❤️' : '🤍'}
                     </button>
                        
-                        <button className={styles['fl__action-btn']} onClick={() => handleOneProduct(product)}>👁️</button>
+                        <button className={styles['fl__action-btn']} onClick={() => handleViewDetails(product)}>👁️</button>
                         <button 
                   className={styles['fl__action-btn']}
                   onClick={() => addToCart(product.id)}
@@ -135,8 +150,8 @@ console.log("start");
                     />
                     <h3 className={styles['fl__product-title']}>{product.name}</h3>
                     <div className={styles['fl__pricing']}>
-                        <span className={styles['fl__price-current']}>${product.currentPrice}</span>
-                        <span className={styles['fl__price-original']}>${product.originalPrice}</span>
+                        <span className={styles['fl__price-current']}>${Math.round(product.price*0.8)}</span>
+                        <span className={styles['fl__price-original']}>${product.price}</span>
                     </div>
                     <div className={styles['fl__rating-wrapper']}>
                         <div className={styles['fl__stars']}>⭐⭐⭐⭐⭐</div>

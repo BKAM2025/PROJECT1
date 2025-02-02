@@ -1,134 +1,113 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "../productDetails.css";
-const ProductDetails = ({ element, handleOneProduct }) => {
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import Navbar from './navBar';
+import styles from '../ProductDetails.module.css';
+
+const ProductDetails = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  
+  const product = location.state?.product;
 
-  // Ensure there's an images array, otherwise fallback to a single image
-  const images = Array.isArray(element.images) && element.images.length > 0 ? element.images : [element.image];
-
-  // Auto-slide effect every 3 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 3000); // Change image every 3 seconds
+    if (!product) {
+      navigate('/home');
+      toast.error('Product not found');
+    }
+  }, [product, navigate]);
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, [images.length]);
+  const addToCart = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('Please login to add items to cart');
+        return;
+      }
 
-  const handleClick = () => {
-    handleOneProduct(element);
-    navigate(`/product/${element._id}`);
+      await axios.post('http://localhost:5000/api/cart/add', 
+        { 
+          productId: product.id,
+          quantity,
+          color: selectedColor,
+          size: selectedSize
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      );
+      
+      toast.success('Added to cart successfully');
+    } catch (error) {
+      toast.error('Failed to add to cart');
+    }
   };
 
+  if (!product) {
+    return null;
+  }
+
   return (
-    <div className={styles.pd__container}>
-      {/* Product Gallery */}
-      <div className={styles.pd__gallery}>
-        <div className={styles.pd__thumbnails}>
-          {images.map((img, index) => (
-            <div 
-              key={index} 
-              className={`${styles.pd__thumbnail} ${currentImageIndex === index ? styles.pd__thumbnailActive : ''}`}
-              onClick={() => setCurrentImageIndex(index)}
-            >
-              <img src={img} alt={`${element.name} view ${index + 1}`} />
-            </div>
-          ))}
+    <>
+      <Navbar />
+      <div className={styles.pd__container}>
+        <div className={styles.pd__gallery}>
+          <img 
+            src={product.image} 
+            alt={product.name} 
+            className={styles.pd__mainImage}
+          />
         </div>
-        <div className={styles.pd__mainImage}>
-          <img src={images[currentImageIndex]} alt={element.name} />
-        </div>
-      </div>
-  
-      {/* Product Info */}
-      <div className={styles.pd__info}>
-        <h1 className={styles.pd__title}>{element.name}</h1>
-        
-        <div className={styles.pd__rating}>
-          <div className={styles.pd__stars}>
-            {[...Array(5)].map((_, index) => (
-              <span key={index} className={index < Math.floor(element.rating) ? styles.pd__starFilled : styles.pd__star}>
-                ★
-              </span>
-            ))}
+
+        <div className={styles.pd__info}>
+          <h1 className={styles.pd__title}>{product.name}</h1>
+          
+          <div className={styles.pd__price}>
+            <span className={styles.pd__currentPrice}>${product.price}</span>
+            {product.originalPrice && (
+              <span className={styles.pd__originalPrice}>${product.originalPrice}</span>
+            )}
           </div>
-          <span className={styles.pd__reviews}>({element.reviews} Reviews)</span>
-          {element.inStock && <span className={styles.pd__stock}>In Stock</span>}
-        </div>
-  
-        <div className={styles.pd__price}>
-          ${element.price}
-        </div>
-  
-        <p className={styles.pd__description}>{element.description}</p>
-  
-        {/* Colors Selection */}
-        <div className={styles.pd__colors}>
-          <span className={styles.pd__label}>Colours:</span>
-          <div className={styles.pd__colorOptions}>
-            {element.colors?.map((color, index) => (
-              <button
-                key={index}
-                className={styles.pd__colorBtn}
-                style={{ backgroundColor: color }}
-              />
-            ))}
-          </div>
-        </div>
-  
-        {/* Size Selection */}
-        <div className={styles.pd__sizes}>
-          <span className={styles.pd__label}>Size:</span>
-          <div className={styles.pd__sizeOptions}>
-            {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
-              <button
-                key={size}
-                className={styles.pd__sizeBtn}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
-        </div>
-  
-        {/* Quantity and Actions */}
-        <div className={styles.pd__actions}>
+
+          <p className={styles.pd__description}>{product.description}</p>
+
           <div className={styles.pd__quantity}>
-            <button className={styles.pd__quantityBtn}>-</button>
-            <input type="text" value="2" readOnly className={styles.pd__quantityInput} />
-            <button className={styles.pd__quantityBtn}>+</button>
-          </div>
-          <button className={styles.pd__buyBtn} onClick={handleClick}>
-            Add To Cart
-          </button>
-          <button className={styles.pd__wishlistBtn}>
-            <svg width="24" height="24" viewBox="0 0 24 24">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-            </svg>
-          </button>
-        </div>
-  
-        {/* Delivery Info */}
-        <div className={styles.pd__delivery}>
-          <div className={styles.pd__deliveryItem}>
-            <span className={styles.pd__deliveryIcon}>🚚</span>
-            <div className={styles.pd__deliveryInfo}>
-              <h4>Free Delivery</h4>
-              <p>Enter your postal code for Delivery Availability</p>
+            <span>Quantity:</span>
+            <div className={styles.pd__quantityControls}>
+              <button 
+                onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
+                disabled={quantity <= 1}
+              >
+                -
+              </button>
+              <span>{quantity}</span>
+              <button 
+                onClick={() => setQuantity(prev => prev + 1)}
+              >
+                +
+              </button>
             </div>
           </div>
-          <div className={styles.pd__deliveryItem}>
-            <span className={styles.pd__deliveryIcon}>↩️</span>
-            <div className={styles.pd__deliveryInfo}>
-              <h4>Return Delivery</h4>
-              <p>Free 30 Days Delivery Returns. Details</p>
-            </div>
+
+          <button 
+            className={styles.pd__addToCart}
+            onClick={addToCart}
+          >
+            Add to Cart
+          </button>
+
+          <div className={styles.pd__meta}>
+            <p>Category: {product.category}</p>
+            <p>Stock: {product.stock} units</p>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

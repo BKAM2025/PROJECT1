@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
-console.log("hello")
+
 // create a database connection in your application using a Sequelize instance and the config file
 const connection = new Sequelize(
   "e_commerce",
@@ -10,8 +10,12 @@ const connection = new Sequelize(
     dialect: "mysql",
   }
 );
-
-
+const category = connection.define('category', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+});
 //your user table using sequilize
 const user = connection.define("user", {
   name: {
@@ -36,19 +40,6 @@ const user = connection.define("user", {
   }
 
 });
-
-
-
-
-const category = connection.define("category", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  }
-})
-
-
-
 const cart = connection.define("cart", {
   quantity: {
     type: DataTypes.INTEGER,
@@ -59,15 +50,12 @@ const cart = connection.define("cart", {
     }
   }
 });
-
 const isFavorite = connection.define("isFavorite", {
   isFavorite: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   }
 })
-
-
 const product = connection.define("product", {
   name: {
     type: DataTypes.STRING,
@@ -81,8 +69,6 @@ const product = connection.define("product", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-
-
   image: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -93,9 +79,33 @@ const product = connection.define("product", {
   },
 
 });
+const slider = connection.define('slider', {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  discount: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  buttonText: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'Shop Now'
+  },
+  link: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+});
 //user
 user.hasMany(product)
 product.belongsTo(user)
+
 category.hasMany(product)
 product.belongsTo(category)
 //cart
@@ -116,5 +126,4 @@ product.belongsToMany(user, { through: isFavorite, as: 'FavoritedByUsers', forei
 //   .catch((error) => {
 //     console.error("Unable to create table : ", error);
 //   });
-
-module.exports = { user, cart, category, product,isFavorite };
+module.exports = { user, cart, category, product,isFavorite ,slider};

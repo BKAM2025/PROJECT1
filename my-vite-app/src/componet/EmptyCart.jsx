@@ -14,7 +14,7 @@ const EmptyCart = () => {
         <p>Looks like you haven't added anything to your cart yet.</p>
         <button 
           className={styles.shopButton}
-          onClick={() => navigate('/shop')}
+          onClick={() => navigate('/home')}
         >
           Continue Shopping
         </button>

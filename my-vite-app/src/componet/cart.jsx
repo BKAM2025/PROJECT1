@@ -5,7 +5,7 @@ import { Trash2, Heart, ShoppingBag, Minus, Plus } from 'lucide-react';
 import { toast } from 'react-toastify';
 import EmptyCart from './EmptyCart';
 import styles from '../Cart.module.css';
-
+import Navbar from "./navBar"
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
@@ -102,6 +102,7 @@ const Cart = () => {
   }
 
   return (
+    <><Navbar />
     <div className={styles.cartContainer}>
       <h1 className={styles.cartTitle}>Shopping Cart</h1>
       
@@ -187,7 +188,7 @@ const Cart = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div></>
   );
 };
 
