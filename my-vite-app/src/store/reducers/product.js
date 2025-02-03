@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const initialState = {
   products: [],
@@ -12,13 +13,10 @@ const initialState = {
 export const filterProduct = createAsyncThunk(
     'product/getAll',
     async () => {
-      console.log("Fetching products...");
       try {
-        const response = await axios.get('http://localhost:5000/api/product/getAll');
-        console.log("Fetched products:", response.data); // Log the response data
+        const response = await axios.get(`${API_URL}/product/getAll`);
         return response.data; // Ensure you're returning the data here
       } catch (error) {
-        console.log("Error fetching products:", error);
         return error.response.data.message
       }
     }

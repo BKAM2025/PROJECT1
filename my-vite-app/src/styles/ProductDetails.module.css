@@ -1,0 +1,112 @@
+.pd__container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  .pd__gallery {
+    position: relative;
+  }
+  
+  .pd__mainImage {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .pd__info {
+    padding: 1rem;
+  }
+  
+  .pd__title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .pd__price {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .pd__currentPrice {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2563eb;
+  }
+  
+  .pd__originalPrice {
+    font-size: 1.2rem;
+    color: #6b7280;
+    text-decoration: line-through;
+  }
+  
+  .pd__description {
+    margin-bottom: 1.5rem;
+    color: #4b5563;
+    line-height: 1.6;
+  }
+  
+  .pd__quantity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .pd__quantityControls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .pd__quantityControls button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e5e7eb;
+    background: white;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .pd__quantityControls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .pd__addToCart {
+    width: 100%;
+    padding: 1rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 1.5rem;
+  }
+  
+  .pd__addToCart:hover {
+    background: #1d4ed8;
+  }
+  
+  .pd__meta {
+    color: #6b7280;
+    font-size: 0.9rem;
+  }
+  
+  .pd__meta p {
+    margin: 0.5rem 0;
+  }
+  
+  @media (max-width: 768px) {
+    .pd__container {
+      grid-template-columns: 1fr;
+    }
+  }

@@ -59,8 +59,7 @@ module.exports = {
         user: {
           id: userr.id,
           mail: userr.mail,
-          accessToken,
-          refreshToken
+          token: jwt.sign({ id: userr.id ,role:userr.role}, process.env.secret_key, { expiresIn: "24h" })
         },
       });
 

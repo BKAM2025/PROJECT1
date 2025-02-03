@@ -2,23 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
-import LoginUsers from './componet/LoginUsers.jsx';
-import SingUpUser from "./componet/singUpUser.jsx";
-import ProductList from './componet/ProductList.jsx';
-import OneProduct from './componet/OneProduct.jsx';
+import LoginUsers from './component/LoginUsers.jsx';
+import SingUpUser from "./component/singUpUser.jsx";
+import ProductList from './component/ProductList.js';
+import OneProduct from './component/OneProduct.js';
 import axios from 'axios';
-import AddProduct from './componet/addProduct.jsx';
-import Profile from './componet/Profile.jsx';
-import CartFull from './componet/cart.jsx';
-import Favorites from './componet/favorite.jsx';
-import Footer from './componet/Footer.jsx';
-import Payment from './componet/Payment.jsx';
-import AboutUs from './componet/about.jsx';
+import AddProduct from './component/addProduct.js';
+import Profile from './component/Profile.jsx';
+import CartFull from './component/cart.js';
+import Favorites from './component/favorite.js';
+import Footer from './component/Footer.js';
+import Payment from './component/Payment.jsx';
+import AboutUs from './component/about.js';
 // import Home from "./componet/home.jsx"
-import ProductDetails from './componet/ProductDetails.jsx';
+import Categories from './component/Categories.js';
+import CategoryProducts from './component/CategoryProducts.js';
+import ProductDetails from './component/ProductDetails.js';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   const [product, setProducts] = useState([]);
@@ -28,7 +31,6 @@ function App() {
   const fetchProduct = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/product/getAll");
-      console.log("Fetched Data:", response.data);
       setProducts(response.data);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -60,6 +62,8 @@ function App() {
             <Route path="/favorites" element={< Favorites />} />
             <Route path="/profile" element={< Profile />} />
             <Route path="/payment" element={< Payment />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/category/:categoryId" element={<CategoryProducts />} /> 
             <Route path="/about" element={< AboutUs />} />
           </Routes>
         </Router>

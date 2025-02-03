@@ -2,7 +2,6 @@ const { product, user, category } = require("../models/index")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
-console.log("hello")
 module.exports = {
   register: async (req, resp) => {
     try {
