@@ -1,4 +1,4 @@
-const { product,user,admin } = require('../models/index');
+const { product, user } = require('../models/index');
 
 const seedProducts = async () => {
   try {
@@ -48,92 +48,50 @@ const seedProducts = async () => {
 };
 
 const seedUser = async () => {
-    try {
-      const Users= [
-        {
-          name: 'khalil',
-          mail:'khalil@gmail.com',
-          password:'0000'
-          
-         
-        },
-        {
-            name: 'adem',
-            mail:'adem@gmail.com',
-            password:'0000'
-            
-        },
-        {
-            name: 'bochra',
-            mail:'bochra@gmail.com',
-            password:'0000'
-            
-        },
-        {
-            name: 'khaled',
-            mail:'khaled@gmail.com ',
-            password:'0000'
-            
-        },
-        {
-            name: 'mahmoud',
-          mail:'mahmod@gmail.com',
-          password:'0000'
-          
-        }
-      ];
-  
-      await user.bulkCreate(Users);
-      console.log('User seeded successfully!');
-    } catch (error) {
-      console.error('Error seeding products:', error);
-    }
-  };
-  const seedAdmin = async () => {
-    try {
-      const Admins= [
-        {
-          name: 'khalil',
-          mail:'khalil@gmail.com',
-          password:'0000'
-          
-         
-        },
-        {
-            name: 'adem',
-            mail:'adem@gmail.com',
-            password:'0000'
-            
-        },
-        {
-            name: 'bochra',
-            mail:'bochra@gmail.com',
-            password:'0000'
-            
-        },
-        {
-            name: 'khaled',
-            mail:'khaled@gmail.com ',
-            password:'0000'
-            
-        },
-        {
-            name: 'mahmoud',
-          mail:'mahmod@gmail.com',
-          password:'0000'
-          
-        }
-      ];
-  
-      await admin.bulkCreate(Admins);
-      console.log('User seeded successfully!');
-    } catch (error) {
-      console.error('Error seeding products:', error);
-    }
-  };
+  try {
+    const Users = [
+      {
+        name: 'khalil',
+        mail: 'khalil@gmail.com',
+        password: '0000',
+        role: "user"
+
+      },
+      {
+        name: 'adem',
+        mail: 'adem@gmail.com',
+        password: '0000',
+        role: "seller"
+      },
+      {
+        name: 'bochra',
+        mail: 'bochra@gmail.com',
+        password: '0000',
+        role: "seller"
+
+      },
+      {
+        name: 'khaled',
+        mail: 'khaled@gmail.com ',
+        password: '0000'
+
+      },
+      {
+        name: 'mahmoud',
+        mail: 'mahmod@gmail.com',
+        password: '0000'
+
+      }
+    ];
+
+    await user.bulkCreate(Users);
+    console.log('User seeded successfully!');
+  } catch (error) {
+    console.error('Error seeding products:', error);
+  }
+};
 
 seedProducts();
 seedUser();
-seedAdmin();
 
-module.exports ={ seedProducts,seedUser,seedAdmin};
+module.exports = { seedProducts, seedUser };

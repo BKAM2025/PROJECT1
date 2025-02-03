@@ -1,28 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/reducers/login";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-// import './LoginUsers.css'; // 
 // Import the updated CSS file
 import styles from '../Login.module.css';
 
 
 function LoginUsers() {
   const dispatch = useDispatch();
-  const { loading, isAuthenticated, user } = useSelector((state) => state.login);
+  const { loading, isAuthenticated, error: authError } = useSelector((state) => state.login);
 
   // State for form inputs
   const [mail, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("")
-
-
   const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(login(mail, password));
+    dispatch(login(mail, password));
     try {
       console.log({ mail, password });
 
@@ -36,22 +32,30 @@ function LoginUsers() {
     }
   };
 
+  useEffect(() => {
+    if (authError) {
+      setError(authError);
+    } else if (isAuthenticated) {
+      navigate('/home');
+    }
+  }, [isAuthenticated, authError, navigate]);
+
 
   // If user is authenticated, redirect them or show a message
   // if (isAuthenticated) {
   //   return <div>Welcome back, {name}!</div>;
   // }
 
-return (
+  return (
     <div className={styles.login__container}>
       <div className={styles.login__imageSection}>
-        <img 
-          src="/path-to-your-shopping-image.jpg" 
-          alt="Shopping Cart with Phone" 
+        <img
+          src="/path-to-your-shopping-image.jpg"
+          alt="Shopping Cart with Phone"
           className={styles.login__image}
         />
       </div>
-      
+
       <div className={styles.login__formSection}>
         <div className={styles.login__formWrapper}>
           <h1 className={styles.login__title}>Log in to Exclusive</h1>
@@ -81,8 +85,8 @@ return (
             </div>
 
             <div className={styles.login__actionRow}>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className={styles.login__button}
                 disabled={loading}
               >
@@ -93,17 +97,17 @@ return (
               </a>
             </div>
 
-            <button 
-              type="button" 
+            <button
+              type="button"
               className={styles.login__googleButton}
-              onClick={() => {/* Handle Google Sign in */}}
+              onClick={() => {/* Handle Google Sign in */ }}
             >
               <img src="/google-icon.png" alt="Google" className={styles.login__googleIcon} />
               Sign in with Google
             </button>
 
             <div className={styles.login__signup}>
-              Don't have an account? 
+              Don't have an account?
               <a href="/register" className={styles.login__signupLink}>Sign up</a>
             </div>
           </form>
@@ -112,7 +116,7 @@ return (
         </div>
       </div>
     </div>
-);
+  );
 }
 
 export default LoginUsers;

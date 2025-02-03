@@ -1,7 +1,10 @@
 .footer {
+    width: 100%;
     background-color: #000;
     color: #FAFAFA;
-    padding: 40px 0 0;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: -30px;
 }
 
 .footer__grid {
@@ -171,4 +174,18 @@
     .footer__grid {
         grid-template-columns: 1fr;
     }
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    bottom: 10px;
+    top: auto;
+    margin: 0;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: black;
+    border-radius: 50%;
 }
