@@ -13,7 +13,6 @@ export const login = (mail, password) => async (dispatch) => {
     dispatch(loginFailure(error.response?.data?.message || error.message));
   }
 };
-
 const initialState = {
   user: null,
   token: null,

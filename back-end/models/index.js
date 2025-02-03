@@ -24,6 +24,10 @@ const user = connection.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  lastname: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   mail: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -36,13 +40,14 @@ const user = connection.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  role: { 
+  role: {
     type: DataTypes.ENUM("user", "seller", "admin"),
     defaultValue: "user",
   }
 
 });
 const cart = connection.define("cart", {
+
   quantity: {
     type: DataTypes.INTEGER,
     allowNull: false,
