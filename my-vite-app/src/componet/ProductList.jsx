@@ -5,10 +5,33 @@ import { filterProduct, filterProductByQuery } from '../store/reducers/product.j
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '../ProductList.module.css';
 import  axios from 'axios';
-
+import { toast } from 'react-toastify';
 const ProductList = ({handleOneProduct}) => {
   const [favorites, setFavorites] = useState({});
+  const addToCart = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('Please login to add items to cart');
+        return;
+      }
 
+      await axios.post('http://localhost:5000/api/cart/add', 
+        { 
+          productId,
+          quantity: 1
+        },
+        {
+          headers: { authorization: `Bearer ${token}` }
+        }
+      );
+      
+      toast.success('Item added to cart');
+    } catch (error) {
+      console.error('Failed to add item to cart:', error);
+      toast.error(error.response?.data?.message || 'Failed to add item to cart');
+    }
+  };
   const dispatch = useDispatch();
 console.log("start");
   // Get products, filteredProducts, loading, and error from Redux state
@@ -98,6 +121,12 @@ console.log("start");
                     </button>
                        
                         <button className={styles['fl__action-btn']} onClick={() => handleOneProduct(product)}>👁️</button>
+                        <button 
+                  className={styles['fl__action-btn']}
+                  onClick={() => addToCart(product.id)}
+                >
+                  🛒
+                </button>
                     </div>
                     <img 
                         src={product.image} 

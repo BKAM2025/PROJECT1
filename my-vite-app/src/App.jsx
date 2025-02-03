@@ -9,13 +9,16 @@ import OneProduct from './componet/OneProduct.jsx';
 import axios from 'axios';
 import AddProduct from './componet/addProduct.jsx';
 import Profile from './componet/Profile.jsx';
-import CartFull from './componet/Fullcart.jsx';
+import CartFull from './componet/cart.jsx';
 import Favorites from './componet/favorite.jsx';
 import Footer from './componet/Footer.jsx';
+import Payment from './componet/Payment.jsx';
 import AboutUs from './componet/about.jsx';
 // import Home from "./componet/home.jsx"
 import ProductDetails from './componet/ProductDetails.jsx';
 import './App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [product, setProducts] = useState([]);
@@ -56,10 +59,12 @@ function App() {
             <Route path="/cart" element={< CartFull />} />
             <Route path="/favorites" element={< Favorites />} />
             <Route path="/profile" element={< Profile />} />
+            <Route path="/payment" element={< Payment />} />
             <Route path="/about" element={< AboutUs />} />
           </Routes>
         </Router>
       </Provider>
+      <ToastContainer position="bottom-right" />
       <Footer />
     </div>
   );

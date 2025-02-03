@@ -1,6 +1,7 @@
+const { where } = require("sequelize");
 const { product } = require("../models/index");
 const cloudinary = require("cloudinary").v2;
-
+const {user} =require("../models/index")
 // Configure Cloudinary
 cloudinary.config({
   cloud_name: "dsbt68v5j",
@@ -41,6 +42,7 @@ const addProduct = async (req, res) => {
       userId: req.user.id,
       categoryId,
     });
+    await user.update({role:"seller"},{where:{id:req.user.id}})
 
     return res.status(200).send({ message: "Product added successfully", newProduct });
   } catch (error) {
