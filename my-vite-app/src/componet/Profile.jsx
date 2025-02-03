@@ -2,6 +2,7 @@ import React,{useState} from "react";
 import Navbar from "./navBar"
 import styles from '../Profile.module.css';
 const Profile=()=>{
+  const API_URL = import.meta.env.VITE_API_URL;
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',

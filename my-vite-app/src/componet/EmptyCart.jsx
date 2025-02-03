@@ -5,6 +5,7 @@ import styles from '../EmptyCart.module.css';
 
 const EmptyCart = () => {
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   return (
     <div className={styles.emptyCartContainer}>

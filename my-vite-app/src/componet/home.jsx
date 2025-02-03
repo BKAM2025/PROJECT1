@@ -11,6 +11,7 @@ import CartFull from './componet/Fullcart.jsx';
 import Favorites from './componet/favorite.jsx';
 
 function Home() {
+  const API_URL = import.meta.env.VITE_API_URL;
     const [product, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const handleOneProduct = (product) => {
@@ -18,12 +19,13 @@ function Home() {
       };
       const fetchProduct = async () => {
         try {
-          const response = await axios.get("http://localhost:5000/api/product/getAll");
+          const response = await axios.get(`${API_URL}/product/getAll`);
           console.log("Fetched Data:", response.data);
           setProducts(response.data);
         } catch (error) {
           console.error("Error fetching products:", error);
         }
+
       };
     
     

@@ -1,80 +1,53 @@
-.categoriesSection {
-    padding: 2rem 0;
-  }
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
+.categories {
+    width: 250px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1rem;
   }
   
   .title {
-    text-align: center;
-    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
   }
   
-  .categoryGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1.5rem;
-    padding: 1rem;
-  }
-  
-  .categoryCard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    cursor: pointer;
-    transition: transform 0.2s;
-    border-radius: 8px;
-  }
-  
-  .categoryCard:hover {
-    transform: translateY(-5px);
-  }
-  
-  .iconWrapper {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 0.5rem;
-  }
-  
-  .categoryIcon {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  
-  .categoryName {
-    text-align: center;
-    font-size: 1rem;
+  .categoryList {
+    list-style: none;
+    padding: 0;
     margin: 0;
   }
   
-  .loadingContainer, .errorContainer {
-    text-align: center;
-    padding: 2rem;
-  }
-  
-  .loadingSpinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3; /* Light grey */
-    border-top: 5px solid #3498db; /* Blue */
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  .loadingContainer {
+  .categoryItem {
     display: flex;
-    justify-content: center;
     align-items: center;
-    min-height: 200px;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+    color: #4B5563;
+  }
+  
+  .categoryItem:hover {
+    background-color: #F3F4F6;
+    color: #2563EB;
+  }
+  
+  .icon {
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
+  }
+  
+  .arrow {
+    margin-left: auto;
+    font-size: 1.2rem;
+    opacity: 0.5;
+  }
+  
+  .categoryItem:hover .arrow {
+    opacity: 1;
+    transform: translateX(4px);
+    transition: transform 0.2s;
   }

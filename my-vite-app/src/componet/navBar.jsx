@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { filterProductByQuery } from '../store/reducers/product.js';
-import { Heart, ShoppingCart, User, Search } from "lucide-react";
+import { Heart, ShoppingCart, User, Search ,PlusCircle} from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import styles from '../styles/Navbar.module.css';
 
 const Navbar = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
@@ -31,6 +32,11 @@ const Navbar = () => {
       </div>
 
       <div className={styles['nav-right']}>
+      <PlusCircle
+            size={24}
+            className={styles.icon}
+            onClick={() => navigate("/addProduct")}
+          />
         <div className={styles['search-container']}>
           <input
             type="text"
@@ -41,6 +47,7 @@ const Navbar = () => {
             className={styles['search-input']}
           />
           <button className={styles['search-button']}>
+          
             <Search size={20} />
           </button>
         </div>

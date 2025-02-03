@@ -1,6 +1,6 @@
 const express = require("express");
 const App = express();
-const port = 5000;
+const port = process.env.PORT
 const Stripe = require("stripe");
 const cors = require("cors")
 console.log("hello");

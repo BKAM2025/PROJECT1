@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
+const API_URL = import.meta.env.VITE_API_URL;
 const initialState = {
   products: [],
   loading: false,
@@ -12,7 +12,7 @@ export const getProductsByCategory = createAsyncThunk(
     async (categoryId, { rejectWithValue }) => {
       try {
         
-        const response = await axios.get(`http://localhost:5000/api/product/getByCategoryId/${categoryId}`);
+        const response = await axios.get(`${API_URL}/product/getByCategoryId/${categoryId}`);
         
        
         

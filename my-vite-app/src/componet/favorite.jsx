@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
 import Navbar from "./navBar";
 
 const Favorites = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [favoriteProducts, setFavoriteProducts] = useState([]);
-  console.log(favoriteProducts,"👌👌")
-
   useEffect(() => {
     fetchFavoriteProducts();
   }, []);
@@ -14,9 +12,9 @@ const Favorites = () => {
   const fetchFavoriteProducts = async () => {
     try {
     
-      const response = await axios.get(`http://localhost:5000/api/isFavorite/favorites`,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
-      console.log("Fetched favorite products:", response.data);
-      
+      const response = await axios.get(`${API_URL}/isFavorite/favorites`,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+
       setFavoriteProducts(response.data);
     } catch (error) {
       console.error("Failed to fetch favorite products:", error);

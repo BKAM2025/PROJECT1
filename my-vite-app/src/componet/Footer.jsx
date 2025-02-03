@@ -6,9 +6,11 @@ const googlePlay = "https://upload.wikimedia.org/wikipedia/commons/7/78/Google_P
 const appStore = "https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg";
 
 const Footer = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   return (
     <footer className={styles.footer}>
       <div className={styles.footer__grid}>
+
         <div className={styles.footer__column}>
           <h3 className={styles.footer__logo}>Exclusive</h3>
           <p className={styles.footer__subscribe}>Subscribe</p>

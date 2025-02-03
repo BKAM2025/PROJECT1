@@ -8,6 +8,7 @@ import { use } from "react";
 // import getUserIdFromToken from "../middlwares/getIdFromToken";
 
 const OneProduct = ({ product }) => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [isFavorite, setIsFavorite] = useState(product.isFavorite)
@@ -28,8 +29,9 @@ const OneProduct = ({ product }) => {
 
   const toggleFavorite = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/product/${product.id}/favorite`, { productId: product.id },{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}, {
+      await axios.put(`${API_URL}/product/${product.id}/favorite`, { productId: product.id },{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}, {
        
+
         productId: product.id
       });
       setIsFavorite(!isFavorite);
@@ -40,16 +42,17 @@ const OneProduct = ({ product }) => {
 
   const fetchCartItems = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/cart/get`);
+      const response = await axios.get(`${API_URL}/cart/get`);
       setCartItems(response.data);
     } catch (error) {
       console.error('Failed to fetch cart items:', error);
     }
+
   };
 
   const addToCart = async (productId) => {
     try {
-      await axios.post('http://localhost:5000/api/cart/add', {
+      await axios.post(`${API_URL}/cart/add`, {
         userId: currentId,    
         productId: productId,
       });

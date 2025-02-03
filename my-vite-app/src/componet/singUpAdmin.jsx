@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../store/reducers/adminAUth'; // Import the loginUser thunk
 
 function LoginPage() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({ mail: "", password: "" });

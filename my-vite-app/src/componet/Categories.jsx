@@ -4,19 +4,21 @@ import axios from 'axios';
 import styles from '../styles/Categories.module.css';
 
 const Categories = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/category/getAll");
+      const response = await axios.get(`${API_URL}/category/getAll`);
       setCategories(response.data.data);
       setLoading(false);
     } catch (err) {
       setError(err.message);
       setLoading(false);
     }
+
   };
   useEffect(() => {
     

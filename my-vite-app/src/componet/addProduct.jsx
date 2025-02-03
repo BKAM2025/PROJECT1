@@ -3,10 +3,12 @@ import axios from "axios";
 import { FilePlus } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import "../AddProduct.css";
-
+import Swal from "sweetalert2";
 const AddProduct = ({ className = "" ,fetch}) => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
 
 
   const [product, setProduct] = useState({
@@ -15,18 +17,27 @@ const AddProduct = ({ className = "" ,fetch}) => {
     description: "",
     image: "",
     stock: "",
- 
+    categoryId: ""
   });
-  
-
-  
-
-
-
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
   };
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+            const response = await axios.get(`${API_URL}/category/getAll`);
+           
 
+        setCategories(response.data.data);
+
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        
+      }
+    };
+
+    fetchCategories();
+  }, []);
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -37,9 +48,10 @@ const AddProduct = ({ className = "" ,fetch}) => {
 
       try {
         const response = await axios.post(
-          "https://api.cloudinary.com/v1_1/dsbt68v5j/image/upload",
+          `${API_URL}/cloudinary/upload`,
           formData
         );
+
 
         if (response.data.secure_url) {
           setProduct({ ...product, image: response.data.secure_url });
@@ -53,11 +65,28 @@ const AddProduct = ({ className = "" ,fetch}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    if (!product.categoryId) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please select a category'
+      });
+      setLoading(false);
+      return;
+    }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/product/add", product,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+      const response = await axios.post(`${API_URL}/product/add`,
+       product,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
       if (response.status === 200) {
-        alert("Product added successfully!");
+          Swal.fire({
+
+            icon: 'success',
+            title: 'Product Added Successfully',
+            text: 'Thank you for your purchase!',
+          }).then(() => {
+            navigate("/home")
+          });
       } else {
         alert("Error adding product");
       }
@@ -89,7 +118,23 @@ const AddProduct = ({ className = "" ,fetch}) => {
             required 
           />
         </div>
-
+        <div className="mb-3">
+          <label htmlFor="categoryId" className="form-label">Category</label>
+          <select
+            name="categoryId"
+            value={product.categoryId}
+            onChange={handleChange}
+            className="form-control"
+            required
+          >
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="mb-3">
           <label htmlFor="price" className="form-label">Price ($)</label>
           <input 

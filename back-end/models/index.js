@@ -2,14 +2,16 @@ const { Sequelize, DataTypes } = require("sequelize");
 
 // create a database connection in your application using a Sequelize instance and the config file
 const connection = new Sequelize(
-  "e_commerce",
-  "root",
-  "root",
+  process.env.bd_name,
+  process.env.bd_user,
+  process.env.bd_password,
   {
-    host: "localhost",
-    dialect: "mysql",
+
+    host: process.env.bd_host,
+    dialect: process.env.bd_dialect,
   }
 );
+
 const category = connection.define('category', {
   name: {
     type: DataTypes.STRING,

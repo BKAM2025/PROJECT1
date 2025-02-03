@@ -7,6 +7,7 @@ import EmptyCart from './EmptyCart';
 import styles from '../Cart.module.css';
 import Navbar from "./navBar"
 const Cart = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,12 +26,13 @@ const Cart = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:5000/api/cart/get', {
+      const response = await axios.get(`${API_URL}/cart/get`, {
         headers: { authorization: `Bearer ${token}` }
       });
       console.log('Cart response:', response.data);
       setCartItems(response.data);
       setLoading(false);
+
     } catch (error) {
       console.error('Error fetching cart:', error);
       toast.error(error.response?.data?.message || 'Failed to load cart items');
@@ -41,10 +43,11 @@ const Cart = () => {
   const updateQuantity = async (productId, newQuantity) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put('http://localhost:5000/api/cart/update', 
+      await axios.put(`${API_URL}/cart/update`, 
         { productId, quantity: newQuantity },
         { headers: { authorization: `Bearer ${token}` }}
       );
+
       fetchCartItems();
       toast.success('Cart updated');
     } catch (error) {
@@ -55,10 +58,11 @@ const Cart = () => {
   const removeFromCart = async (productId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete('http://localhost:5000/api/cart/remove', {
+      await axios.delete(`${API_URL}/cart/remove`, {
         headers: { authorization: `Bearer ${token}` },
         data: { productId }
       });
+
       fetchCartItems();
       toast.success('Item removed from cart');
     } catch (error) {
@@ -69,10 +73,11 @@ const Cart = () => {
   const addToWishlist = async (productId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/isFavorite/add', 
+      await axios.post(`${API_URL}/isFavorite/add`, 
         { productId },
         { headers: { authorization: `Bearer ${token}` }}
       );
+
       toast.success('Added to wishlist');
     } catch (error) {
       toast.error('Failed to add to wishlist');

@@ -4,7 +4,7 @@ const cloudinary = require("cloudinary").v2;
 const {user} =require("../models/index")
 // Configure Cloudinary
 cloudinary.config({
-  cloud_name: "dsbt68v5j",
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
@@ -29,6 +29,8 @@ const addProduct = async (req, res) => {
     if(!req.user.role === "user"){
       return res.status(401).json({ message: "Unauthorized" });
     }
+    console.log("lenaaaaaheyy",req.user.id)
+
 
     const { name, price, description, stock, categoryId, image } = req.body;
 

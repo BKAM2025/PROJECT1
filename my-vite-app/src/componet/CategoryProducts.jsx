@@ -5,6 +5,7 @@ import styles from '../styles/CategoryProducts.module.css';
 import Navbar from './navBar';
 
 const CategoryProducts = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { categoryId } = useParams();
   const [products, setProducts] = useState([]);
   const [categoryName, setCategoryName] = useState('');
@@ -14,9 +15,10 @@ const CategoryProducts = () => {
     try {
       setLoading(true);
       // Fetch products for this category
-      const productsResponse = await axios.get(`http://localhost:5000/api/category/products/id/${categoryId}`);
+      const productsResponse = await axios.get(`${API_URL}/category/products/id/${categoryId}`);
       setProducts(productsResponse.data.data.products);
       setLoading(false);
+
     } catch (err) {
       setError(err.message);
       setLoading(false);

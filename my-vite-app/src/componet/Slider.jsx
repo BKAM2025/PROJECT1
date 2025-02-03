@@ -24,13 +24,14 @@ const Slider = () => {
 
   const fetchSlides = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/slider/get');
+      const response = await axios.get(`${API_URL}/slider/get`);
       setSlides(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching slides:', error);
       setLoading(false);
     }
+
   };
 
   if (loading) {

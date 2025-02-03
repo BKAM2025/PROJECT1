@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import styles from './SignUpUser.module.css';
 
 const SignUpUser = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [name, setName] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +28,7 @@ const SignUpUser = () => {
     <div className={styles.signup__container}>
       <div className={styles.signup__imageSection}>
         <img 
-          src="/path-to-your-shopping-image.jpg" 
+          src="https://tse3.mm.bing.net/th?id=OIP.kqtFdwUZNipAtSg7jNhh7gHaEa&pid=Api&P=0&h=180" 
           alt="Shopping Cart with Phone" 
           className={styles.signup__image}
         />

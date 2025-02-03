@@ -9,6 +9,7 @@ import styles from '../Login.module.css';
 
 
 function LoginUsers() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const dispatch = useDispatch();
   const { loading, isAuthenticated, user } = useSelector((state) => state.login);
 
@@ -26,10 +27,11 @@ function LoginUsers() {
     try {
       console.log({ mail, password });
 
-      var response = await axios.post("http://localhost:5000/api/user/login", { mail, password })
+      var response = await axios.post(`${API_URL}/user/login`, { mail, password })
       console.log(response);
       localStorage.setItem("token", response.data.user.token)
       navigate("/home");
+
     }
     catch (error) {
       throw error
@@ -46,10 +48,12 @@ return (
     <div className={styles.login__container}>
       <div className={styles.login__imageSection}>
         <img 
-          src="/path-to-your-shopping-image.jpg" 
-          alt="Shopping Cart with Phone" 
+       src={import.meta.env.VITE_IMAGE_URL}
+                alt="Shopping Cart with Phone" 
           className={styles.login__image}
         />
+
+
       </div>
       
       <div className={styles.login__formSection}>

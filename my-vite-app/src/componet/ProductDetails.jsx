@@ -6,6 +6,7 @@ import Navbar from './navBar';
 import styles from '../ProductDetails.module.css';
 
 const ProductDetails = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const location = useLocation();
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -30,7 +31,7 @@ const ProductDetails = () => {
         return;
       }
 
-      await axios.post('http://localhost:5000/api/cart/add', 
+      await axios.post(`${API_URL}/cart/add`, 
         { 
           productId: product.id,
           quantity,

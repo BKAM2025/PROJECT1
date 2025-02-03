@@ -9,9 +9,11 @@ import styles from '../ProductList.module.css';
 import  axios from 'axios';
 import { toast } from 'react-toastify';
 const ProductList = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState({});
   const handleViewDetails = (product) => {
+
     navigate(`/productDetails/${product.id}`, { state: { product } });
   };
   const addToCart = async (productId) => {
@@ -22,10 +24,11 @@ const ProductList = () => {
         return;
       }
 
-      await axios.post('http://localhost:5000/api/cart/add', 
+      await axios.post(`${API_URL}/cart/add`, 
         { 
           productId,
           quantity: 1
+
         },
         {
           headers: { authorization: `Bearer ${token}` }
@@ -39,23 +42,22 @@ const ProductList = () => {
     }
   };
   const dispatch = useDispatch();
-console.log("start");
   // Get products, filteredProducts, loading, and error from Redux state
   const { products, filteredProducts, loading, error } = useSelector(state => state.product);
 
   useEffect(() => {
-    console.log("start");
     dispatch(filterProduct()); // Dispatch the filterProduct action to fetch all products
     fetchFavoriteStatus();
   }, [dispatch]);
 
   const fetchFavoriteStatus = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/isFavorite/favorites`, {
+      const response = await axios.get(`${API_URL}/isFavorite/favorites`, {
         headers: { authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       const favoritesMap = {};
       response.data.forEach(product => {
+
         favoritesMap[product.id] = true;
       });
       setFavorites(favoritesMap);
@@ -75,7 +77,7 @@ console.log("start");
   }
   const toggleFavorite = async (product) => {
     try {
-      await axios.put(`http://localhost:5000/api/isFavorite/${product.id}`, {}, {
+      await axios.put(`${API_URL}/isFavorite/${product.id}`, {}, {
         headers: { authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       // Toggle the favorite status locally

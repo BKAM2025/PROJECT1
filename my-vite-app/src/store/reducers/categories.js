@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
+const API_URL = import.meta.env.VITE_API_URL;
 const initialState = {
   categories: [],
   loading: false,
@@ -11,10 +11,11 @@ export const getCategories = createAsyncThunk(
     "categories/getCategories", 
     async (_, { rejectWithValue }) => {
       try {
-        const response = await axios.get("http://localhost:5000/api/category/getAll");
+        const response = await axios.get(`${API_URL}/category/getAll`);
         return response.data.data; // Assuming your successful response has a data property
       } catch (error) {
         // Extract the specific database error if it exists
+
         const dbError = error.response?.data?.error;
         const errorMessage = dbError || error.response?.data?.message || 'Failed to fetch categories';
         console.error('Category fetch error:', errorMessage);
