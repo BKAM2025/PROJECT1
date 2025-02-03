@@ -1,18 +1,18 @@
 const { product, user, category } = require("../models/index")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
-const { where } = require("sequelize");
+const { Op } = require("sequelize");
 console.log("hello")
 module.exports = {
   register: async (req, resp) => {
     try {
-      const { name, mail, password } = req.body
-      const check = await user.findOne({ where: { mail } })
+      const { name, mail, password, imgUrl } = req.body
+      const check = await user.findOne({ where: { mail: mail } })
       if (check) {
         return resp.status(404).send("mail existed")
       }
       const hachPassword = await bcrypt.hash(password, 15)
-      const newadmin = await admin.create({ name, mail, password: hachPassword })
+      const newadmin = await user.create({ name, mail, password: hachPassword, role: "admin", imgUrl })
       return resp.status(201).send(newadmin)
     }
     catch (error) {
@@ -24,7 +24,7 @@ module.exports = {
   login: async (req, res) => {
     try {
       const { mail, password } = req.body;
-      const admi = await user.findOne({ where: { mail } });
+      const admi = await user.findOne({ where: { mail, role: "admin", } });
       if (!admi) {
         return res
           .status(404)
@@ -50,9 +50,16 @@ module.exports = {
   // },
   getALLusers: async (req, res) => {
     try {
-      const allusers = await user.findAll()
-      console.log("hello users:", allusers)
-      res.status(200).send({ "this is your app users:": allusers })
+      const allusers = await user.findAll({
+        where: {
+          [Op.or]: [
+            { role: "user" },
+            { role: "seller" }
+          ]
+        }
+      })
+      console.log(allusers)
+      res.status(200).send(allusers)
     } catch (err) {
       console.log("err", err)
       res.status(400).send({ "message": err })
@@ -60,44 +67,22 @@ module.exports = {
   },
   getSellers: async (req, res) => {
     try {
-      const allusers = await user.findAll();
-
-      // Use Promise.all to handle asynchronous filtering
-      const result = await Promise.all(
-        allusers.map(async (usery) => {
-          const productofOne = await product.findAll({ where: { userId: usery.id } });
-          return productofOne.length > 0 ? usery : null;
-        })
-      );
-
-      // Filter out null values (users without products)
-      const filteredUsers = result.filter(usery => usery !== null);
-
-      res.status(200).send(filteredUsers);
+      const allusers = await user.findAll({ where: { role: "seller" } })
+      console.log(allusers)
+      res.status(200).send(allusers)
     } catch (err) {
-      console.log("err", err);
-      res.status(400).send({ "message": err });
+      console.log("err", err)
+      res.status(400).send({ "message": err })
     }
   },
   getBuyer: async (req, res) => {
     try {
-      const allUsers = await user.findAll();
-
-      // Use Promise.all to handle asynchronous operations
-      const result = await Promise.all(
-        allUsers.map(async (usery) => {
-          const productsOfUser = await product.findAll({ where: { userId: usery.id } });
-          return productsOfUser.length === 0 ? usery : null; // Return user if no products
-        })
-      );
-
-      // Filter out null values (users with products)
-      const filteredUsers = result.filter(usery => usery !== null);
-
-      res.status(200).send(filteredUsers);
+      const allusers = await user.findAll({ where: { role: "user" } })
+      console.log(allusers)
+      res.status(200).send(allusers)
     } catch (err) {
-      console.log("err", err);
-      res.status(400).send({ "message": err });
+      console.log("err", err)
+      res.status(400).send({ "message": err })
     }
   }
 
@@ -130,7 +115,89 @@ module.exports = {
       console.log("errr", err)
       res.status(400).send(err)
     }
+  },
+  deleteProductAdmin: async (req, res) => {
+    const { id } = req.params
+    try {
+      await product.destroy({ where: { id } })
+      res.status(200).send("destroyed successfully")
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
+    }
+  },
+  createCategorie: async (req, res) => {
+    const { name } = req.body
+    try {
+      await category.create({ name })
+      res.status(200).send("created successfully")
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
+    }
+  },
+  deleteCategoryAdmin: async (req, res) => {
+    const { id } = req.params
+    try {
+      await category.destroy({ where: { id } })
+      res.status(200).send("destroyed successfully")
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
+    }
+  },
+  deleteUserAdmin: async (req, res) => {
+    const { id } = req.params
+    try {
+      await user.destroy({ where: { id } })
+      res.status(200).send("destroyed successfully")
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
+    }
+  },
+  UpdateCategory: async (req, res) => {
+    const { name } = req.body
+    const { id } = req.params
+    try {
+      await category.update({ name }, { where: { id } })
+      res.status(200).send("updated successfully")
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
+    }
+  },
+  UpdateUser: async (req, res) => {
+    const { name, role, mail } = req.body
+    const { id } = req.params
+    try {
+      await user.update({ name, role, mail }, { where: { id } })
+      res.status(200).send("updated successfully")
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
+    }
+  },
+  getOneAdmin: async (req, res) => {
+    const { id } = req.params
+    try {
+      const one = await user.findOne({ where: { id: id, role: "admin" } })
+      res.status(200).send(one)
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
+    }
+  },
+  UpdateAdmine: async (req, res) => {
+    const { name, mail, address, lastname, imgUrl } = req.body
+    const { id } = req.params
+    try {
+      await user.update({ name, mail, address, lastname, imgUrl }, { where: { id } })
+      res.status(200).send("updated successfully")
+    } catch (err) {
+      console.log("errr", err)
+      res.status(400).send(err)
+    }
   }
 };
-
 

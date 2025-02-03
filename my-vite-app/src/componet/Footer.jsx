@@ -14,14 +14,14 @@ const Footer = () => {
           <p className={styles.footer__subscribe}>Subscribe</p>
           <p className={styles.footer__text}>Get 10% off your first order</p>
           <div className={styles.footer__inputBox}>
-            <input 
-              type="email" 
-              placeholder="Enter your email" 
+            <input
+              type="email"
+              placeholder="Enter your email"
               className={styles.footer__input}
             />
             <button className={styles.footer__button}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M2 12h20m-8-8l8 8-8 8" stroke="currentColor" strokeWidth="2"/>
+                <path d="M2 12h20m-8-8l8 8-8 8" stroke="currentColor" strokeWidth="2" />
               </svg>
             </button>
           </div>
@@ -30,11 +30,10 @@ const Footer = () => {
         <div className={styles.footer__column}>
           <h3 className={styles.footer__title}>Support</h3>
           <p className={styles.footer__address}>
-            111 Bijoy sarani, Dhaka,<br />
-            DH 1515, Bangladesh.
+            tunis, tunis,<br />
           </p>
-          <p className={styles.footer__email}>exclusive@gmail.com</p>
-          <p className={styles.footer__phone}>+88015-88888-9999</p>
+          <p className={styles.footer__email}>bochrabenromdhane@gmail.com</p>
+          <p className={styles.footer__phone}>+216 51.71.48.88</p>
         </div>
 
         <div className={styles.footer__column}>
@@ -81,7 +80,7 @@ const Footer = () => {
         </div>
       </div>
       <div className={styles.footer__copyright}>
-        <p>© Copyright Rimel 2022. All right reserved</p>
+        <p>© Copyright Rimel 2025. All right reserved</p>
       </div>
     </footer>
   );

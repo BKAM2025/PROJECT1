@@ -12,6 +12,7 @@ import Profile from './componet/Profile.jsx';
 import CartFull from './componet/Fullcart.jsx';
 import Favorites from './componet/favorite.jsx';
 import Footer from './componet/Footer.jsx';
+import AboutUs from './componet/about.jsx';
 // import Home from "./componet/home.jsx"
 import ProductDetails from './componet/ProductDetails.jsx';
 import './App.css';
@@ -48,13 +49,14 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginUsers />} />
             <Route path="/register" element={<SingUpUser />} />
-            <Route path="/home" element={<ProductList  handleOneProduct={handleOneProduct} />} />
+            <Route path="/home" element={<ProductList handleOneProduct={handleOneProduct} />} />
             <Route path="/product/:id" element={<OneProduct product={selectedProduct} />} />
             <Route path="/productDetails/:id" element={<ProductDetails product={selectedProduct} />} />
             <Route path="/addProduct" element={< AddProduct fetch={fetchProduct} />} />
             <Route path="/cart" element={< CartFull />} />
-            <Route path="/favorites" element={< Favorites/>} />
+            <Route path="/favorites" element={< Favorites />} />
             <Route path="/profile" element={< Profile />} />
+            <Route path="/about" element={< AboutUs />} />
           </Routes>
         </Router>
       </Provider>

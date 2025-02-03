@@ -4,12 +4,8 @@ const { deleted, login, register, getUserIdFromToken } = require("../controllers
 const { refreshTokenMiddleware } = require("../controllers/user.controller")
 
 Router.delete("/:id", deleted);
-Router.post("/login", refreshTokenMiddleware, login);
-Router.post("/register", refreshTokenMiddleware, register);
-// Router.get("/getcurrentuser", refreshTokenMiddleware, getUserIdFromToken);
-
-
-Router.delete("/:id", deleted);
 Router.post("/login", login);
 Router.post("/register", register);
+// Router.get("/getcurrentuser", refreshTokenMiddleware, getUserIdFromToken);
+
 module.exports = Router;

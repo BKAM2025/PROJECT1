@@ -3,31 +3,33 @@ import axios from "axios";
 import { useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './NavBar';
+import Footer from './Footer';
 function SellerProducts() {
     const { sellerId } = useParams();
     const [products, setProducts] = useState([]);
+    const fetchProducts = async () => {
+        try {
+            const result = await axios.get(`http://localhost:5000/api/admin/products/${sellerId}`);
+            setProducts(result.data);
+        } catch (err) {
+            console.log("Error fetching products:", err);
+        }
+    };
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const result = await axios.get(`http://localhost:5000/api/admin/product/${sellerId}`);
-                setProducts(result.data);
-            } catch (err) {
-                console.log("Error fetching products:", err);
-            }
-        };
-
         fetchProducts();
     }, [sellerId]);
 
-    // const handleDelete = async (productId) => {
-    //     try {
-    //         await axios.delete(`http://localhost:5000/api/admin/product/${productId}`);
-    //         setProducts(products.filter(product => product.id !== productId));
-    //     } catch (err) {
-    //         console.log("Error deleting product:", err);
-    //     }
-    // };
+    const handleDelete = async (productId) => {
+        try {
+            await axios.delete(`http://localhost:5000/api/admin/product/${productId}`);
+            console.log("deleted succefully")
+            setProducts(products.filter(product => product.id !== productId));
+            fetchProducts()
+        } catch (err) {
+            console.log("Error deleting product:", err);
+        }
+    };
 
     return (
         <div>
@@ -44,7 +46,7 @@ function SellerProducts() {
                                     <p className="card-text">Description: {product.description}</p>
                                     <button
                                         className="btn btn-danger"
-                                        onClick={() => { }}
+                                        onClick={() => { handleDelete(product.id) }}
                                     >
                                         Delete
                                     </button>
@@ -54,6 +56,7 @@ function SellerProducts() {
                     ))}
                 </div>
             </div>
+            <Footer />
         </div>
     );
 }

@@ -18,6 +18,10 @@ const user = connection.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  lastname: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   mail: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -33,6 +37,14 @@ const user = connection.define("user", {
   role: {
     type: DataTypes.ENUM("user", "seller", "admin"),
     defaultValue: "user",
+  },
+  address: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  imgUrl: {
+    type: DataTypes.STRING,
+    allowNull: true,
   }
 
 });
@@ -108,4 +120,4 @@ product.belongsToMany(user, { through: isFavorite, as: 'FavoritedByUsers', forei
 //     console.error("Unable to create table : ", error);
 //   });
 
-module.exports = { user, cart, category, product,isFavorite };
+module.exports = { user, cart, category, product, isFavorite };
