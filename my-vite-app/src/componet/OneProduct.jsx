@@ -28,9 +28,8 @@ const OneProduct = ({ product }) => {
 
   const toggleFavorite = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/product/${product.id}/favorite`, { 
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      }, {
+      await axios.put(`http://localhost:5000/api/product/${product.id}/favorite`, { productId: product.id },{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}, {
+       
         productId: product.id
       });
       setIsFavorite(!isFavorite);

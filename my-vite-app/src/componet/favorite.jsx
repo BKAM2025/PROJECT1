@@ -5,6 +5,7 @@ import Navbar from "./navBar";
 
 const Favorites = () => {
   const [favoriteProducts, setFavoriteProducts] = useState([]);
+  console.log(favoriteProducts,"👌👌")
 
   useEffect(() => {
     fetchFavoriteProducts();
@@ -14,6 +15,8 @@ const Favorites = () => {
     try {
     
       const response = await axios.get(`http://localhost:5000/api/isFavorite/favorites`,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+      console.log("Fetched favorite products:", response.data);
+      
       setFavoriteProducts(response.data);
     } catch (error) {
       console.error("Failed to fetch favorite products:", error);
@@ -26,6 +29,7 @@ const Favorites = () => {
       <h2>Favorite Products</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
         {favoriteProducts.map((product) => (
+          
           <div key={product.id} style={{
             border: '1px solid #ddd',
             borderRadius: '8px',

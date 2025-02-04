@@ -1,13 +1,13 @@
-const { product, user} = require("../models/index");
+const { product,user,isFavorite} = require("../models/index");
 
 module.exports = {
   toggleFavorite: async (req, res) => {
     try {
-      const { 
-     productId } = req.body;
+      const { productId } = req.params;
+      const userId=req.user.id
 
       const [favorite, created] = await isFavorite.findOrCreate({
-        where: { userId:req.user.id, productId },
+        where: { userId, productId },
         defaults: { isFavorite: true }
       });
 
@@ -26,14 +26,14 @@ module.exports = {
 
   getFavoriteProducts: async (req, res) => {
     try {
-      const { userId } = req.params;
+      const  userId  = req.user.id;
 
       const favoriteProducts = await product.findAll({
         include: [{
           model: user,
           as: 'FavoritedByUsers',
           where: { id: userId },
-          through: { where: { isFavorite: true } }
+          through: { model: isFavorite, where: { isFavorite: true } }
         }]
       });
 
